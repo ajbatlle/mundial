@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--azul:#052789;--rojo:#FF0800;--blanco:#FFFFFF;--negro:#000000;--g1:#f4f4f2;--g2:#e8e8e5;--g3:#b0b0a8;--gt:#444}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--g1);color:var(--negro);font-size:14px;line-height:1.5}
+/* NAV */
+.nav{background:var(--azul);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;border-bottom:2px solid var(--rojo)}
+.nav-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;letter-spacing:3px;color:var(--blanco);text-transform:uppercase;display:flex;align-items:center;gap:10px;cursor:pointer}
+.nav-ball{width:22px;height:22px;border-radius:50%;background:var(--blanco);display:flex;align-items:center;justify-content:center}
+.nav-ball-inner{width:11px;height:11px;border-radius:50%;background:var(--azul)}
+.nav-links{display:flex}
+.nav-links a{color:rgba(255,255,255,0.5);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:0 13px;height:52px;display:flex;align-items:center;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s;cursor:pointer}
+.nav-links a:hover{color:var(--blanco)}
+.nav-links a.active{color:var(--blanco);border-bottom-color:var(--rojo)}
+/* HERO */
+.hero{background:var(--azul);padding:36px 56px;display:flex;align-items:center;justify-content:center;gap:48px;position:relative;min-height:300px;overflow:hidden}
+.hero-img{flex:0 0 auto;width:300px;display:flex;align-items:center;justify-content:center;position:relative;z-index:2}
+.hero-img img{width:100%;height:auto;max-height:300px;object-fit:contain;display:block}
+.hero-ph{width:240px;height:240px;border-radius:50%;border:2px dashed rgba(255,255,255,0.2);display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.hero-ph-icon{width:44px;height:44px;border-radius:50%;border:2px dashed rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,0.3)}
+.hero-ph-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);text-align:center;line-height:1.8}
+.hero-divider{flex:0 0 auto;align-self:stretch;width:1px;background:rgba(255,255,255,0.22);margin:24px 0}
+.hero-left{flex:0 1 auto;position:relative;z-index:2;min-width:0}
+.hero-eye{font-size:18px;letter-spacing:.5px;color:var(--rojo);font-weight:700;margin-bottom:6px}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:92px;line-height:.92;color:var(--blanco);text-transform:uppercase;letter-spacing:-1px}
+.hero-title .acc{color:var(--rojo)}
+.hero-meta{margin-top:26px;display:flex;flex-direction:column;gap:7px}
+.hero-meta span{font-size:16px;color:rgba(255,255,255,0.82);letter-spacing:.5px;font-weight:600}
+.hero-meta strong{color:var(--blanco)}
+.hero-meta .day{color:var(--rojo);font-weight:700}
+/* TABS */
+.tabs-nav{background:var(--blanco);border-bottom:1px solid var(--g2);display:flex;justify-content:center;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:90}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;color:var(--gt);font-family:'Barlow',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:0 18px;height:44px;cursor:pointer;white-space:nowrap;margin-bottom:-1px;transition:color .15s}
+.tab-btn:hover{color:var(--negro)}
+.tab-btn.active{color:var(--azul);border-bottom-color:var(--azul)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:28px 24px}
+/* SECTION HEADER */
+.sh{margin-bottom:20px}
+.sh-eye{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);font-weight:700;margin-bottom:5px}
+.sh-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:28px;text-transform:uppercase;letter-spacing:.5px;line-height:1}
+/* FIXTURE */
+.fixture-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;align-items:start}
+.day-card{background:var(--blanco);border:1px solid var(--g2);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.day-head{background:var(--azul);color:var(--blanco);padding:9px 13px;display:flex;justify-content:space-between;align-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;user-select:none}
+.day-head-left{display:flex;align-items:center;gap:10px}
+.day-chevron{font-size:10px;transition:transform .25s;display:inline-block;opacity:.7}
+.day-card.collapsed .day-chevron{transform:rotate(-90deg)}
+.day-count{background:rgba(255,255,255,0.18);font-family:'Barlow',sans-serif;font-size:11px;font-weight:600;letter-spacing:0;padding:1px 9px;border-radius:10px}
+.day-body{padding:2px 0;overflow:hidden;max-height:2000px;transition:max-height .35s ease,padding .2s ease}
+.day-card.collapsed .day-body{max-height:0;padding:0}
+.fx-match{padding:9px 13px;border-bottom:1px solid var(--g2)}
+.fx-match:last-child{border-bottom:none}
+.fx-match.fx-must{box-shadow:inset 3px 0 0 #c9a84c}
+.fx-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.fx-grp{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;color:var(--blanco);background:var(--azul);padding:1px 7px;border-radius:3px}
+.fx-time{font-size:11px;color:var(--g3);font-weight:600;letter-spacing:.3px}
+.fx-fin{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--rojo)}
+.fx-team{display:flex;align-items:center;gap:8px;padding:3px 0}
+.fx-flag{flex-shrink:0;width:22px;display:flex;align-items:center}
+.fx-name{flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fx-score{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;color:var(--g3);min-width:18px;text-align:right}
+.fx-team.win .fx-name{font-weight:800}
+.fx-team.win .fx-score{color:var(--rojo)}
+.fx-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;flex-wrap:wrap}
+.fx-venue{font-size:10px;color:var(--g3);letter-spacing:.3px}
+.fx-tv{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.fx-special{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.5px;color:var(--negro);padding:4px 0}
+.fx-tba{opacity:.85}
+.tc{font-size:9px;font-weight:700;letter-spacing:.8px;padding:2px 5px;text-transform:uppercase}
+.tc-chv{background:rgba(208,2,27,0.08);color:#a00;border:1px solid rgba(208,2,27,0.18)}
+.tc-ds{background:rgba(5,39,137,0.07);color:var(--azul);border:1px solid rgba(5,39,137,0.12)}
+.tc-pm{background:rgba(0,140,70,0.07);color:#005528;border:1px solid rgba(0,140,70,0.15)}
+.tc-dis{background:rgba(70,0,160,0.06);color:#3d006e;border:1px solid rgba(70,0,160,0.12)}
+/* GRUPOS */
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:10px}
+.group-card{background:var(--blanco);border:1px solid var(--g2)}
+.group-head{background:var(--azul);padding:8px 14px;display:flex;align-items:baseline;gap:8px}
+.group-letter{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--blanco);letter-spacing:3px}
+.group-body{padding:4px 0}
+.gteam{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid var(--g2);cursor:pointer;transition:background .12s}
+.gteam:last-child{border-bottom:none}
+.gteam:hover{background:var(--g1)}
+.gteam-flag{flex-shrink:0}
+.gteam-name{flex:1;font-size:13px;font-weight:500}
+.gteam-pts{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--azul);min-width:22px;text-align:right}
+.gteam-pts.lead{color:var(--rojo)}
+/* LLAVE ELIMINATORIA */
+.bracket-wrap{overflow-x:auto;padding-bottom:16px}
+.bracket{display:flex;gap:0;min-width:900px}
+.bracket-round{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--g2)}
+.bracket-round:last-child{border-right:none}
+.br-head{background:var(--negro);color:var(--blanco);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:7px 12px;text-align:center}
+.br-slots{flex:1;display:flex;flex-direction:column;justify-content:space-around;padding:8px 6px;gap:6px}
+.br-match{background:var(--blanco);border:1px solid var(--g2);padding:6px 10px;font-size:11px}
+.br-match.winner{border-color:var(--azul);border-left:3px solid var(--azul)}
+.br-team{display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid var(--g2);font-size:12px;font-weight:500}
+.br-team:last-child{border-bottom:none}
+.br-team .score{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--azul)}
+.br-tbd{color:var(--g3);font-size:11px;font-style:italic;padding:4px 0}
+/* ESTADÍSTICAS */
+.live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:28px}
+.live-card{background:var(--blanco);border:1px solid var(--g2)}
+.lc-head{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 12px;color:var(--blanco)}
+.lc-head.azul{background:var(--azul)}
+.lc-head.rojo{background:var(--rojo)}
+.lc-head.negro{background:var(--negro)}
+.lc-head.amarillo{background:#F2B900;color:var(--negro)}
+.lc-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--g2)}
+.lc-row:last-child{border-bottom:none}
+.lc-pos{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--g3);width:18px;text-align:center;flex-shrink:0}
+.lc-name{flex:1;font-size:12px;font-weight:500;line-height:1.3}
+.lc-sub{font-size:10px;color:var(--g3)}
+.lc-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700}
+.lc-val.rojo{color:var(--rojo)}
+.lc-val.azul{color:var(--azul)}
+.lc-val.amarillo{color:#B88900}
+.res-card{background:var(--blanco);border:1px solid var(--g2);padding:11px 16px;display:flex;align-items:center;gap:12px;margin-bottom:5px}
+.res-teams{flex:1;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.res-score{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--azul);letter-spacing:2px;min-width:56px;text-align:center}
+.res-sub{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--g3);font-weight:600}
+/* NOTICIAS */
+.news-grid{display:grid;gap:8px}
+.news-card{background:var(--blanco);border:1px solid var(--g2);border-left:3px solid var(--negro);padding:14px 16px}
+.news-card.brk{border-left-color:var(--rojo)}
+.news-date{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--g3);font-weight:600;margin-bottom:4px}
+.news-hed{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;text-transform:uppercase;color:var(--negro);line-height:1.1;margin-bottom:6px}
+.news-body{font-size:13px;color:var(--gt);line-height:1.6}
+.news-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:var(--g2);color:var(--gt);padding:2px 7px;margin-top:8px}
+.news-tag.rojo{background:var(--rojo);color:var(--blanco)}
+/* TEAM MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;overflow-y:auto}
+.modal-bg.open{display:flex;align-items:flex-start;justify-content:center;padding:32px 16px}
+.modal{background:var(--blanco);width:100%;max-width:700px;border-top:4px solid var(--azul)}
+.modal-head{background:var(--azul);padding:16px 20px;display:flex;align-items:center;gap:14px}
+.modal-flag{flex-shrink:0}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--blanco);text-transform:uppercase;letter-spacing:1px}
+.modal-sub{font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.modal-close{margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;padding:4px 8px}
+.modal-close:hover{color:var(--blanco)}
+.modal-body{padding:20px}
+.modal-section{margin-bottom:20px}
+.modal-sh{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--g3);padding-bottom:6px;border-bottom:1px solid var(--g2);margin-bottom:10px}
+.team-match{background:var(--g1);border:1px solid var(--g2);padding:10px 12px;margin-bottom:5px;display:flex;align-items:center;gap:10px}
+.tm-date{font-size:10px;color:var(--g3);letter-spacing:.5px;width:80px;flex-shrink:0}
+.tm-teams{flex:1;font-size:13px;font-weight:600}
+.tm-score{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--azul);min-width:44px;text-align:right}
+.tm-pend{color:var(--g3);font-size:13px;font-weight:600}
+.squad-pos-group{margin-bottom:16px}
+.squad-pos-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--azul);margin-bottom:8px;padding-bottom:4px;border-bottom:2px solid var(--azul);display:inline-block}
+.squad-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.squad-player{display:flex;align-items:center;gap:10px;background:var(--blanco);border:1px solid var(--g2);padding:8px 10px}
+.sq-num{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--blanco)}
+.sq-info{flex:1;min-width:0}
+.sq-name{font-size:13px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sq-club{font-size:10px;color:var(--g3);letter-spacing:.3px;line-height:1.2;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* EMPTY */
+.empty{background:var(--blanco);border:1px solid var(--g2);padding:28px;text-align:center;color:var(--g3);font-size:12px;letter-spacing:1px}
+/* FOOTER */
+.footer{background:var(--negro);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;margin-top:40px}
+.footer-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;letter-spacing:3px;color:var(--blanco);text-transform:uppercase}
+.footer-note{font-size:10px;color:rgba(255,255,255,0.22);letter-spacing:.5px}
+@media(max-width:640px){
+  .nav-links{display:none}
+  .hero{flex-direction:column;text-align:center;gap:24px;padding:32px 24px}
+  .hero-divider{display:none}
+  .hero-img{width:200px}
+  .hero-title{font-size:60px}
+  .hero-meta{align-items:center}
+  .groups-grid,.live-grid{grid-template-columns:1fr}
+  .bracket{min-width:600px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-img">
+    <img id="mascot-img" src="mascota.png" alt="Mascota Mundial 2026" onerror="this.style.display='none';document.getElementById('mascot-ph').style.display='flex'">
+    <div id="mascot-ph" class="hero-ph">
+      <div class="hero-ph-icon">+</div>
+      <div class="hero-ph-label">Tu imagen<br>aquí</div>
+    </div>
+  </div>
+  <div class="hero-divider"></div>
+  <div class="hero-left">
+    <div class="hero-eye">FIFA World Cup 2026</div>
+    <div class="hero-title">Mundial<br>2026</div>
+    <div class="hero-meta">
+      <span><strong>11 jun – 19 jul</strong></span>
+      <span><strong>EE.UU. – México – Canadá</strong></span>
+      <span>Día <strong class="day" id="hero-day">1</strong> de 39</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-nav">
+  <button class="tab-btn active" onclick="showTab('fixture',this)">Fixture</button>
+  <button class="tab-btn" onclick="showTab('grupos',this)">Grupos</button>
+  <button class="tab-btn" onclick="showTab('llave',this)">Llave</button>
+  <button class="tab-btn" onclick="showTab('estadisticas',this)">Estadísticas</button>
+  <button class="tab-btn" onclick="showTab('noticias',this)">Noticias</button>
+</div>
+
+<!-- FIXTURE -->
+<div id="tab-fixture" class="tab-pane active"><div class="container">
+  <div class="sh"><div class="sh-eye">Calendario oficial · horario Chile</div><div class="sh-title">Fixture completo</div></div>
+  <div id="fixture-container"></div>
+</div></div>
+
+<!-- GRUPOS -->
+<div id="tab-grupos" class="tab-pane"><div class="container">
+  <div class="sh"><div class="sh-eye">Posiciones · se actualizan tras cada jornada</div><div class="sh-title">Los 12 grupos</div></div>
+  <div class="groups-grid" id="groups-container"></div>
+</div></div>
+
+<!-- LLAVE -->
+<div id="tab-llave" class="tab-pane"><div class="container">
+  <div class="sh"><div class="sh-eye">Ronda de 32 · arranca el 28 de junio · cruces por definir al cierre de la fase de grupos</div><div class="sh-title">Cuadro de llave</div></div>
+  <div id="qualified-container"></div>
+  <div class="bracket-wrap"><div class="bracket" id="bracket-container"></div></div>
+</div></div>
+
+<!-- ESTADÍSTICAS -->
+<div id="tab-estadisticas" class="tab-pane"><div class="container">
+  <div class="sh"><div class="sh-eye">Actualizado al cierre de cada jornada</div><div class="sh-title">Estadísticas del torneo</div></div>
+  <div class="live-grid" id="stats-container"></div>
+  <div class="sh" style="margin-top:28px"><div class="sh-eye">Fair Play · 101 amarillas en la fase de grupos</div><div class="sh-title">Amarillas por equipo</div></div>
+  <div id="amarillas-container"></div>
+  <div class="sh" style="margin-top:28px"><div class="sh-eye">Partidos jugados</div><div class="sh-title">Resultados</div></div>
+  <div id="results-container"></div>
+</div></div>
+
+<!-- NOTICIAS -->
+<div id="tab-noticias" class="tab-pane"><div class="container">
+  <div class="sh"><div class="sh-eye">Apuntes del torneo</div><div class="sh-title">Noticias</div></div>
+  <div class="news-grid" id="news-container"></div>
+</div></div>
+
+<!-- TEAM MODAL -->
+<div class="modal-bg" id="team-modal" onclick="closeModal(event)">
+  <div class="modal" id="modal-inner">
+    <div class="modal-head">
+      <div class="modal-flag" id="modal-flag"></div>
+      <div>
+        <div class="modal-title" id="modal-name"></div>
+        <div class="modal-sub" id="modal-sub"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('team-modal').classList.remove('open')">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-logo">MUNDIAL <span style="color:var(--rojo)">2026</span></div>
+  <div class="footer-note">Última actualización: <span id="last-update">11 jun 2026</span></div>
+</footer>
+
+<script>
+/* ================================================================
+   DATOS \u2014 EDITAR AQU\u00CD CADA D\u00CDA
+   ================================================================ */
+const DATA = {
+  lastUpdate: "23 jun 2026 \u2014 jornada 13, 2.\u00AA fecha de grupos",
+  torneoDay: 13,
+
+  /* Resultados verificados - fuente: FIFA.com, ESPN, Yahoo Sports */
+  resultados: [
+    /* D\u00EDa 1 - 11 jun */
+    {t1:"M\u00E9xico",t1Flag:"mx",t2:"Sud\u00E1frica",t2Flag:"za",g1:2,g2:0,grupo:"A",fecha:"11 jun"},
+    {t1:"Corea del Sur",t1Flag:"kr",t2:"Rep. Checa",t2Flag:"cz",g1:2,g2:1,grupo:"A",fecha:"11 jun"},
+    /* D\u00EDa 2 - 12 jun */
+    {t1:"Canad\u00E1",t1Flag:"ca",t2:"Bosnia-Herz.",t2Flag:"ba",g1:1,g2:1,grupo:"B",fecha:"12 jun"},
+    {t1:"EE.UU.",t1Flag:"us",t2:"Paraguay",t2Flag:"py",g1:4,g2:1,grupo:"D",fecha:"12 jun"},
+    /* D\u00EDa 3 - 13 jun */
+    {t1:"Qatar",t1Flag:"qa",t2:"Suiza",t2Flag:"ch",g1:1,g2:1,grupo:"B",fecha:"13 jun"},
+    {t1:"Brasil",t1Flag:"br",t2:"Marruecos",t2Flag:"ma",g1:1,g2:1,grupo:"C",fecha:"13 jun"},
+    {t1:"Escocia",t1Flag:"gb-sct",t2:"Hait\u00ED",t2Flag:"ht",g1:1,g2:0,grupo:"C",fecha:"13 jun"},
+    {t1:"Australia",t1Flag:"au",t2:"Turqu\u00EDa",t2Flag:"tr",g1:2,g2:0,grupo:"D",fecha:"13 jun"},
+    /* D\u00EDa 4 - 14 jun */
+    {t1:"Alemania",t1Flag:"de",t2:"Curazao",t2Flag:"cw",g1:7,g2:1,grupo:"E",fecha:"14 jun"},
+    {t1:"Pa\u00EDses Bajos",t1Flag:"nl",t2:"Jap\u00F3n",t2Flag:"jp",g1:2,g2:2,grupo:"F",fecha:"14 jun"},
+    {t1:"Costa de Marfil",t1Flag:"ci",t2:"Ecuador",t2Flag:"ec",g1:1,g2:0,grupo:"E",fecha:"14 jun"},
+    {t1:"Suecia",t1Flag:"se",t2:"T\u00FAnez",t2Flag:"tn",g1:5,g2:1,grupo:"F",fecha:"14 jun"},
+    /* D\u00EDa 5 - 15 jun */
+    {t1:"Espa\u00F1a",t1Flag:"es",t2:"Cabo Verde",t2Flag:"cv",g1:0,g2:0,grupo:"H",fecha:"15 jun"},
+    {t1:"Egipto",t1Flag:"eg",t2:"B\u00E9lgica",t2Flag:"be",g1:1,g2:1,grupo:"G",fecha:"15 jun"},
+    {t1:"Arabia Saudita",t1Flag:"sa",t2:"Uruguay",t2Flag:"uy",g1:1,g2:1,grupo:"H",fecha:"15 jun"},
+    /* D\u00EDa 6 - 16 jun */
+    {t1:"Ir\u00E1n",t1Flag:"ir",t2:"Nueva Zelanda",t2Flag:"nz",g1:2,g2:2,grupo:"G",fecha:"16 jun"},
+    {t1:"Francia",t1Flag:"fr",t2:"Senegal",t2Flag:"sn",g1:3,g2:1,grupo:"I",fecha:"16 jun"},
+    {t1:"Irak",t1Flag:"iq",t2:"Noruega",t2Flag:"no",g1:1,g2:4,grupo:"I",fecha:"16 jun"},
+    {t1:"Argentina",t1Flag:"ar",t2:"Argelia",t2Flag:"dz",g1:3,g2:0,grupo:"J",fecha:"16 jun"},
+    /* D\u00EDa 7 - 17 jun */
+    {t1:"Austria",t1Flag:"at",t2:"Jordania",t2Flag:"jo",g1:3,g2:1,grupo:"J",fecha:"17 jun"},
+    {t1:"Portugal",t1Flag:"pt",t2:"RD Congo",t2Flag:"cd",g1:1,g2:1,grupo:"K",fecha:"17 jun"},
+    {t1:"Inglaterra",t1Flag:"gb-eng",t2:"Croacia",t2Flag:"hr",g1:4,g2:2,grupo:"L",fecha:"17 jun"},
+    {t1:"Ghana",t1Flag:"gh",t2:"Panam\u00E1",t2Flag:"pa",g1:1,g2:0,grupo:"L",fecha:"17 jun"},
+    {t1:"Uzbekist\u00E1n",t1Flag:"uz",t2:"Colombia",t2Flag:"co",g1:1,g2:3,grupo:"K",fecha:"17 jun"},
+    /* D\u00EDa 8 - 18 jun (2.\u00AA fecha) */
+    {t1:"Rep. Checa",t1Flag:"cz",t2:"Sud\u00E1frica",t2Flag:"za",g1:1,g2:1,grupo:"A",fecha:"18 jun"},
+    {t1:"Suiza",t1Flag:"ch",t2:"Bosnia-Herz.",t2Flag:"ba",g1:4,g2:1,grupo:"B",fecha:"18 jun"},
+    {t1:"Canad\u00E1",t1Flag:"ca",t2:"Qatar",t2Flag:"qa",g1:6,g2:0,grupo:"B",fecha:"18 jun"},
+    {t1:"M\u00E9xico",t1Flag:"mx",t2:"Corea del Sur",t2Flag:"kr",g1:1,g2:0,grupo:"A",fecha:"18 jun"},
+    /* D\u00EDa 9 - 19 jun */
+    {t1:"EE.UU.",t1Flag:"us",t2:"Australia",t2Flag:"au",g1:2,g2:0,grupo:"D",fecha:"19 jun"},
+    {t1:"Marruecos",t1Flag:"ma",t2:"Escocia",t2Flag:"gb-sct",g1:1,g2:0,grupo:"C",fecha:"19 jun"},
+    {t1:"Brasil",t1Flag:"br",t2:"Hait\u00ED",t2Flag:"ht",g1:3,g2:0,grupo:"C",fecha:"19 jun"},
+    {t1:"Turqu\u00EDa",t1Flag:"tr",t2:"Paraguay",t2Flag:"py",g1:0,g2:1,grupo:"D",fecha:"19 jun"},
+    /* D\u00EDa 10 - 20 jun */
+    {t1:"Pa\u00EDses Bajos",t1Flag:"nl",t2:"Suecia",t2Flag:"se",g1:5,g2:1,grupo:"F",fecha:"20 jun"},
+    {t1:"Alemania",t1Flag:"de",t2:"Costa de Marfil",t2Flag:"ci",g1:2,g2:1,grupo:"E",fecha:"20 jun"},
+    {t1:"Ecuador",t1Flag:"ec",t2:"Curazao",t2Flag:"cw",g1:0,g2:0,grupo:"E",fecha:"20 jun"},
+    {t1:"T\u00FAnez",t1Flag:"tn",t2:"Jap\u00F3n",t2Flag:"jp",g1:0,g2:4,grupo:"F",fecha:"20 jun"},
+    /* D\u00EDa 11 - 21 jun */
+    {t1:"Espa\u00F1a",t1Flag:"es",t2:"Arabia Saudita",t2Flag:"sa",g1:4,g2:0,grupo:"H",fecha:"21 jun"},
+    {t1:"B\u00E9lgica",t1Flag:"be",t2:"Ir\u00E1n",t2Flag:"ir",g1:0,g2:0,grupo:"G",fecha:"21 jun"},
+    {t1:"Uruguay",t1Flag:"uy",t2:"Cabo Verde",t2Flag:"cv",g1:2,g2:2,grupo:"H",fecha:"21 jun"},
+    {t1:"Egipto",t1Flag:"eg",t2:"Nueva Zelanda",t2Flag:"nz",g1:3,g2:1,grupo:"G",fecha:"21 jun"},
+    /* D\u00EDa 12 - 22 jun */
+    {t1:"Argentina",t1Flag:"ar",t2:"Austria",t2Flag:"at",g1:2,g2:0,grupo:"J",fecha:"22 jun"},
+    {t1:"Francia",t1Flag:"fr",t2:"Irak",t2Flag:"iq",g1:3,g2:0,grupo:"I",fecha:"22 jun"},
+    {t1:"Noruega",t1Flag:"no",t2:"Senegal",t2Flag:"sn",g1:3,g2:2,grupo:"I",fecha:"22 jun"},
+    {t1:"Jordania",t1Flag:"jo",t2:"Argelia",t2Flag:"dz",g1:1,g2:2,grupo:"J",fecha:"22 jun"},
+    /* D\u00EDa 13 - 23 jun */
+    {t1:"Portugal",t1Flag:"pt",t2:"Uzbekist\u00E1n",t2Flag:"uz",g1:5,g2:0,grupo:"K",fecha:"23 jun"},
+    {t1:"Inglaterra",t1Flag:"gb-eng",t2:"Ghana",t2Flag:"gh",g1:0,g2:0,grupo:"L",fecha:"23 jun"},
+    {t1:"Panam\u00E1",t1Flag:"pa",t2:"Croacia",t2Flag:"hr",g1:0,g2:1,grupo:"L",fecha:"23 jun"},
+
+  ],
+
+  /* Goleadores verificados - fuente: NBC Sports, FIFA.com, ESPN (al 23 jun) */
+  goleadores: [
+    {nombre:"Lionel Messi",pais:"Argentina [[FLAG:ar]]",goles:5},
+    {nombre:"Kylian Mbapp\u00E9",pais:"Francia [[FLAG:fr]]",goles:4},
+    {nombre:"Erling Haaland",pais:"Noruega [[FLAG:no]]",goles:4},
+    {nombre:"Jonathan David",pais:"Canad\u00E1 [[FLAG:ca]]",goles:3},
+    {nombre:"Deniz Undav",pais:"Alemania [[FLAG:de]]",goles:3},
+    /* 2 goles */
+    {nombre:"Cristiano Ronaldo",pais:"Portugal [[FLAG:pt]]",goles:2},
+    {nombre:"Folarin Balogun",pais:"EE.UU. [[FLAG:us]]",goles:2},
+    {nombre:"Kai Havertz",pais:"Alemania [[FLAG:de]]",goles:2},
+    {nombre:"Yasin Ayari",pais:"Suecia [[FLAG:se]]",goles:2},
+    {nombre:"Harry Kane",pais:"Inglaterra [[FLAG:gb-eng]]",goles:2},
+    {nombre:"Cyle Larin",pais:"Canad\u00E1 [[FLAG:ca]]",goles:2},
+    {nombre:"Johan Manzambi",pais:"Suiza [[FLAG:ch]]",goles:2},
+    {nombre:"Ismael Saibari",pais:"Marruecos [[FLAG:ma]]",goles:2},
+    {nombre:"Matheus Cunha",pais:"Brasil [[FLAG:br]]",goles:2},
+    {nombre:"Vinicius Jr.",pais:"Brasil [[FLAG:br]]",goles:2},
+    {nombre:"Crysencio Summerville",pais:"Pa\u00EDses Bajos [[FLAG:nl]]",goles:2},
+    {nombre:"Brian Brobbey",pais:"Pa\u00EDses Bajos [[FLAG:nl]]",goles:2},
+    {nombre:"Cody Gakpo",pais:"Pa\u00EDses Bajos [[FLAG:nl]]",goles:2},
+    {nombre:"Daichi Kamada",pais:"Jap\u00F3n [[FLAG:jp]]",goles:2},
+    {nombre:"Ayase Ueda",pais:"Jap\u00F3n [[FLAG:jp]]",goles:2},
+    {nombre:"Mikel Oyarzabal",pais:"Espa\u00F1a [[FLAG:es]]",goles:2},
+    {nombre:"Maxi Ara\u00FAjo",pais:"Uruguay [[FLAG:uy]]",goles:2},
+    {nombre:"Elijah Just",pais:"Nueva Zelanda [[FLAG:nz]]",goles:2},
+    /* 1 gol */
+    {nombre:"Rafael Le\u00E3o",pais:"Portugal [[FLAG:pt]]",goles:1},
+    {nombre:"Nuno Mendes",pais:"Portugal [[FLAG:pt]]",goles:1},
+    {nombre:"Jo\u00E3o Neves",pais:"Portugal [[FLAG:pt]]",goles:1},
+    {nombre:"Ante Budimir",pais:"Croacia [[FLAG:hr]]",goles:1},
+    {nombre:"Martin Baturina",pais:"Croacia [[FLAG:hr]]",goles:1},
+    {nombre:"Petar Musa",pais:"Croacia [[FLAG:hr]]",goles:1},
+    {nombre:"Jude Bellingham",pais:"Inglaterra [[FLAG:gb-eng]]",goles:1},
+    {nombre:"Marcus Rashford",pais:"Inglaterra [[FLAG:gb-eng]]",goles:1},
+    {nombre:"Caleb Yirenkyi",pais:"Ghana [[FLAG:gh]]",goles:1},
+    {nombre:"Daniel Mu\u00F1oz",pais:"Colombia [[FLAG:co]]",goles:1},
+    {nombre:"Abbosbek Fayzullayev",pais:"Uzbekist\u00E1n [[FLAG:uz]]",goles:1},
+    {nombre:"Yoane Wissa",pais:"RD Congo [[FLAG:cd]]",goles:1},
+    {nombre:"Bradley Barcola",pais:"Francia [[FLAG:fr]]",goles:1},
+    {nombre:"Leo \u00D8stigard",pais:"Noruega [[FLAG:no]]",goles:1},
+    {nombre:"Ibrahim Mbaye",pais:"Senegal [[FLAG:sn]]",goles:1},
+    {nombre:"Romano Schmid",pais:"Austria [[FLAG:at]]",goles:1},
+    {nombre:"Marko Arnautovic",pais:"Austria [[FLAG:at]]",goles:1},
+    {nombre:"Ali Olwan",pais:"Jordania [[FLAG:jo]]",goles:1},
+    {nombre:"Mohammed Salah",pais:"Egipto [[FLAG:eg]]",goles:1},
+    {nombre:"Eman Ashour",pais:"Egipto [[FLAG:eg]]",goles:1},
+    {nombre:"Abdulelah Al-Amri",pais:"Arabia Saudita [[FLAG:sa]]",goles:1},
+    {nombre:"Mohamed Mohebi",pais:"Ir\u00E1n [[FLAG:ir]]",goles:1},
+    {nombre:"Ramin Rezaeian",pais:"Ir\u00E1n [[FLAG:ir]]",goles:1},
+    {nombre:"Ayman Hussein",pais:"Irak [[FLAG:iq]]",goles:1},
+    {nombre:"Alexander Isak",pais:"Suecia [[FLAG:se]]",goles:1},
+    {nombre:"Viktor Gy\u00F6k\u00E9res",pais:"Suecia [[FLAG:se]]",goles:1},
+    {nombre:"Mattias Svanberg",pais:"Suecia [[FLAG:se]]",goles:1},
+    {nombre:"Virgil van Dijk",pais:"Pa\u00EDses Bajos [[FLAG:nl]]",goles:1},
+    {nombre:"Keito Nakamura",pais:"Jap\u00F3n [[FLAG:jp]]",goles:1},
+    {nombre:"Matias Galarza",pais:"Paraguay [[FLAG:py]]",goles:1},
+    {nombre:"Nestory Irankunda",pais:"Australia [[FLAG:au]]",goles:1},
+    {nombre:"Connor Metcalfe",pais:"Australia [[FLAG:au]]",goles:1},
+    {nombre:"Giovanni Reyna",pais:"EE.UU. [[FLAG:us]]",goles:1},
+    {nombre:"John McGinn",pais:"Escocia [[FLAG:gb-sct]]",goles:1},
+    {nombre:"Amad Diallo",pais:"Costa de Marfil [[FLAG:ci]]",goles:1},
+    {nombre:"Felix Nmecha",pais:"Alemania [[FLAG:de]]",goles:1},
+    {nombre:"Nico Schlotterbeck",pais:"Alemania [[FLAG:de]]",goles:1},
+    {nombre:"Jamal Musiala",pais:"Alemania [[FLAG:de]]",goles:1},
+    {nombre:"Nathaniel Brown",pais:"Alemania [[FLAG:de]]",goles:1},
+    {nombre:"Livano Comenencia",pais:"Curazao [[FLAG:cw]]",goles:1},
+    {nombre:"Juli\u00E1n Qui\u00F1ones",pais:"M\u00E9xico [[FLAG:mx]]",goles:1},
+    {nombre:"Ra\u00FAl Jim\u00E9nez",pais:"M\u00E9xico [[FLAG:mx]]",goles:1},
+    {nombre:"Hwang In-beom",pais:"Corea del Sur [[FLAG:kr]]",goles:1},
+    {nombre:"Oh Hyeon-gyu",pais:"Corea del Sur [[FLAG:kr]]",goles:1},
+    {nombre:"Ladislav Krejci",pais:"Rep. Checa [[FLAG:cz]]",goles:1},
+    {nombre:"Jovo Luki\u0107",pais:"Bosnia-Herz. [[FLAG:ba]]",goles:1},
+    {nombre:"Breel Embolo",pais:"Suiza [[FLAG:ch]]",goles:1},
+    {nombre:"Boualem Khoukhi",pais:"Qatar [[FLAG:qa]]",goles:1},
+    {nombre:"Omar Rekik",pais:"T\u00FAnez [[FLAG:tn]]",goles:1},
+  ],
+
+  /* Asistidores verificados (registro parcial: se a\u00F1aden solo asistencias confirmadas por fuente) */
+  asistidores: [
+    {nombre:"Jo\u00E3o Cancelo",pais:"Portugal [[FLAG:pt]]",asist:1},
+    {nombre:"Nuno Mendes",pais:"Portugal [[FLAG:pt]]",asist:1},
+    {nombre:"Facundo Medina",pais:"Argentina [[FLAG:ar]]",asist:1},
+    {nombre:"Erik Lira",pais:"M\u00E9xico [[FLAG:mx]]",asist:1},
+    {nombre:"Roberto Alvarado",pais:"M\u00E9xico [[FLAG:mx]]",asist:1},
+    {nombre:"Hwang In-beom",pais:"Corea del Sur [[FLAG:kr]]",asist:1},
+  ],
+
+  /* Tarjetas rojas verificadas - fuente: The Sporting News (registro de expulsiones) */
+  tarjetas: [
+    {nombre:"Sphephelo Sithole (Roja)",pais:"Sud\u00E1frica [[FLAG:za]]",tarjetas:1},
+    {nombre:"Themba Zwane (Roja)",pais:"Sud\u00E1frica [[FLAG:za]]",tarjetas:1},
+    {nombre:"C\u00E9sar Montes (Roja)",pais:"M\u00E9xico [[FLAG:mx]]",tarjetas:1},
+    {nombre:"Homam Ahmed (Roja)",pais:"Qatar [[FLAG:qa]]",tarjetas:1},
+    {nombre:"Assim Madibo (Roja)",pais:"Qatar [[FLAG:qa]]",tarjetas:1},
+    {nombre:"Tarik Muharemovi\u0107 (Roja)",pais:"Bosnia-Herz. [[FLAG:ba]]",tarjetas:1},
+    {nombre:"Miguel Almir\u00F3n (Roja)",pais:"Paraguay [[FLAG:py]]",tarjetas:1},
+    {nombre:"Nathan Ngoy (Roja)",pais:"B\u00E9lgica [[FLAG:be]]",tarjetas:1},
+  ],
+
+  /* Amarillas por equipo (Fair Play) - fuente: thesoccerworldcups.com (101 amarillas, al 23 jun) */
+  amarillasEquipo: [
+    {name:"Paraguay",flag:"py",ta:6},
+    {name:"Bosnia-Herz.",flag:"ba",ta:5},
+    {name:"Curazao",flag:"cw",ta:5},
+    {name:"Sud\u00E1frica",flag:"za",ta:4,nota:"Mokoena suspendido"},
+    {name:"Estados Unidos",flag:"us",ta:4},
+    {name:"Hait\u00ED",flag:"ht",ta:4},
+    {name:"Australia",flag:"au",ta:4},
+    {name:"Escocia",flag:"gb-sct",ta:4},
+    {name:"Cabo Verde",flag:"cv",ta:3,nota:"Lopes Cabral suspendido"},
+    {name:"Qatar",flag:"qa",ta:3},
+    {name:"Arabia Saudita",flag:"sa",ta:3},
+    {name:"Portugal",flag:"pt",ta:3},
+    {name:"Egipto",flag:"eg",ta:3},
+    {name:"Suecia",flag:"se",ta:3},
+    {name:"Brasil",flag:"br",ta:3},
+    {name:"B\u00E9lgica",flag:"be",ta:3},
+    {name:"Canad\u00E1",flag:"ca",ta:3},
+    {name:"Pa\u00EDses Bajos",flag:"nl",ta:3},
+    {name:"Costa de Marfil",flag:"ci",ta:3},
+    {name:"Austria",flag:"at",ta:3},
+    {name:"Corea del Sur",flag:"kr",ta:3},
+    {name:"Turqu\u00EDa",flag:"tr",ta:2},
+    {name:"Ecuador",flag:"ec",ta:2},
+    {name:"Uruguay",flag:"uy",ta:2},
+    {name:"Panam\u00E1",flag:"pa",ta:2},
+    {name:"Ir\u00E1n",flag:"ir",ta:2},
+    {name:"Nueva Zelanda",flag:"nz",ta:2},
+    {name:"Argentina",flag:"ar",ta:2},
+    {name:"Suiza",flag:"ch",ta:2},
+    {name:"Marruecos",flag:"ma",ta:1},
+    {name:"M\u00E9xico",flag:"mx",ta:1},
+    {name:"T\u00FAnez",flag:"tn",ta:1},
+    {name:"Uzbekist\u00E1n",flag:"uz",ta:1},
+    {name:"Rep. Checa",flag:"cz",ta:1},
+    {name:"RD Congo",flag:"cd",ta:1},
+    {name:"Colombia",flag:"co",ta:1},
+    {name:"Espa\u00F1a",flag:"es",ta:1},
+    {name:"Irak",flag:"iq",ta:1},
+    {name:"Ghana",flag:"gh",ta:1}
+  ],
+
+  /* Noticias - solo hechos verificados con fuente */
+  noticias: [
+    { fecha:"23 jun 2026", brk:true,
+      titular:"Ronaldo entra en la leyenda: gol en seis Mundiales y goleada 5-0 de Portugal",
+      texto:"Cristiano Ronaldo, de 41 a\u00F1os, abri\u00F3 el marcador al minuto 6 ante Uzbekist\u00E1n y se convirti\u00F3 en el primer futbolista en marcar en seis Copas del Mundo distintas. Firm\u00F3 un doblete y Portugal sentenci\u00F3 con Nuno Mendes, un autogol y Rafael Le\u00E3o. Los lusos quedan a un paso de los octavos en el Grupo K.",
+      tag:"Grupo K" },
+    { fecha:"23 jun 2026", brk:false,
+      titular:"Inglaterra choca contra el muro de Ghana (0-0) y Croacia respira",
+      texto:"Inglaterra remat\u00F3 19 veces pero no encontr\u00F3 el gol en Foxborough: Ghana defendi\u00F3 con orden y suma un punto valioso. En el otro duelo del Grupo L, Croacia venci\u00F3 1-0 a Panam\u00E1 con un tanto de Ante Budimir; los paname\u00F1os quedan eliminados y los croatas se meten en la pelea por avanzar.",
+      tag:"Grupo L" },
+    { fecha:"22 jun 2026", brk:true,
+      titular:"Messi, m\u00E1ximo goleador de la historia de los Mundiales con 18 goles",
+      texto:"Lionel Messi marc\u00F3 dos veces ante Austria (2-0) en Arlington \u2014pese a fallar antes un penal\u2014 y super\u00F3 los 16 goles de Miroslav Klose para quedarse en solitario como el m\u00E1ximo artillero en la historia de la Copa del Mundo. Argentina, campeona vigente, sella su pase a la Ronda de 32 con una fecha de antelaci\u00F3n.",
+      tag:"Grupo J" },
+    { fecha:"22 jun 2026", brk:false,
+      titular:"D\u00EDa de astros: Mbapp\u00E9 y Haaland tambi\u00E9n firman dobletes",
+      texto:"En la misma jornada que Messi, Kylian Mbapp\u00E9 hizo dos goles en el 3-0 de Francia a Irak \u2014partido con una pausa de m\u00E1s de dos horas por tormenta en Filadelfia\u2014 y Erling Haaland respondi\u00F3 con otro doblete en el 3-2 de Noruega sobre Senegal. Francia y Noruega avanzan; Argelia rescat\u00F3 un 2-1 ante Jordania.",
+      tag:"Grupo I" },
+    { fecha:"21 jun 2026", brk:false,
+      titular:"Espa\u00F1a despierta: 4-0 a Arabia Saudita con doblete de Oyarzabal",
+      texto:"Tras el fr\u00EDo 0-0 del debut, la selecci\u00F3n espa\u00F1ola gole\u00F3 con autoridad en Atlanta. Mikel Oyarzabal firm\u00F3 dos goles y Espa\u00F1a lidera el Grupo H. Cabo Verde, en tanto, sigue invicto: empat\u00F3 2-2 con Uruguay y mantiene vivo el sue\u00F1o de unos octavos hist\u00F3ricos.",
+      tag:"Grupo H" },
+    { fecha:"21 jun 2026", brk:false,
+      titular:"Salah enciende a Egipto en su primera victoria; B\u00E9lgica e Ir\u00E1n no se hacen da\u00F1o",
+      texto:"Mohammed Salah marc\u00F3 un golazo tras un eslalon desde la banda y Egipto venci\u00F3 3-1 a Nueva Zelanda para encaminar su clasificaci\u00F3n en el Grupo G. En el otro partido, B\u00E9lgica e Ir\u00E1n firmaron un 0-0 con un gol iran\u00ED anulado por el VAR tras una revisi\u00F3n milim\u00E9trica.",
+      tag:"Grupo G" },
+    { fecha:"20 jun 2026", brk:false,
+      titular:"Curazao, el pa\u00EDs m\u00E1s peque\u00F1o en un Mundial, saca un punto hist\u00F3rico",
+      texto:"Con apenas 150.000 habitantes, Curazao empat\u00F3 0-0 con Ecuador y consigui\u00F3 su primer punto en una Copa del Mundo. El guardameta Eloy Room fue la figura. En el otro duelo del Grupo E, Alemania sufri\u00F3 m\u00E1s de lo esperado pero venci\u00F3 2-1 a Costa de Marfil.",
+      tag:"Grupo E" },
+    { fecha:"20 jun 2026", brk:false,
+      titular:"Jap\u00F3n golea 4-0 a T\u00FAnez y Pa\u00EDses Bajos arrasa a Suecia",
+      texto:"Jap\u00F3n cuaj\u00F3 una noche redonda ante T\u00FAnez \u2014que queda eliminada\u2014 con Ueda y Kamada de protagonistas. Pa\u00EDses Bajos, por su parte, gole\u00F3 5-1 a Suecia con dianas de Brobbey, Gakpo y Summerville. El Grupo F queda al rojo vivo entre neerlandeses y japoneses.",
+      tag:"Grupo F" },
+    { fecha:"19 jun 2026", brk:false,
+      titular:"Estados Unidos es el primer clasificado a octavos",
+      texto:"Sin su estrella Christian Pulisic, lesionado, el anfitri\u00F3n venci\u00F3 2-0 a Australia en Seattle \u2014autogol de Burgess y cabezazo de Alex Freeman\u2014 y se convirti\u00F3 en el primer equipo en sellar su pase a la Ronda de 32. Brasil, en paralelo, gole\u00F3 3-0 a Hait\u00ED, que se despide del torneo.",
+      tag:"Grupo D" },
+    { fecha:"19 jun 2026", brk:false,
+      titular:"Galarza marca el gol m\u00E1s r\u00E1pido del Mundial y la primera roja por taparse la boca",
+      texto:"Mat\u00EDas Galarza anot\u00F3 a los 64 segundos \u2014el tanto m\u00E1s veloz del torneo\u2014 y Paraguay venci\u00F3 1-0 a Turqu\u00EDa, que queda eliminada. El partido dej\u00F3 historia disciplinaria: Miguel Almir\u00F3n vio la primera tarjeta roja del Mundial bajo la nueva regla que sanciona taparse la boca en una discusi\u00F3n. Marruecos, en el Grupo C, venci\u00F3 1-0 a Escocia.",
+      tag:"Grupo D" },
+    { fecha:"18 jun 2026", brk:false,
+      titular:"M\u00E9xico, pleno de seis puntos: 1-0 a Corea del Sur",
+      texto:"El Tri sum\u00F3 su segunda victoria con un ajustado 1-0 en Guadalajara y se encamina a los octavos como l\u00EDder del Grupo A. Rep\u00FAblica Checa y Sud\u00E1frica, en el otro partido, empataron 1-1 y siguen con vida.",
+      tag:"Grupo A" },
+    { fecha:"18 jun 2026", brk:false,
+      titular:"Canad\u00E1 destroza a Qatar 6-0 y Suiza golea a Bosnia",
+      texto:"Canad\u00E1 firm\u00F3 la goleada de la jornada con un 6-0 a Qatar \u2014que jug\u00F3 con uno menos tras la roja a Homam El Amin\u2014 y Jonathan David se destap\u00F3 como goleador. Suiza, por su parte, venci\u00F3 4-1 a Bosnia. El Grupo B queda en manos de canadienses y suizos.",
+      tag:"Grupo B" },
+    { fecha:"17 jun 2026", brk:false,
+      titular:"Inglaterra remonta a Croacia (4-2) en un duelo de campanillas",
+      texto:"Inglaterra empez\u00F3 perdiendo ante Croacia pero reaccion\u00F3 con una gran segunda parte para ganar 4-2 en Dallas. Harry Kane firm\u00F3 un doblete y Bellingham y Rashford completaron la cuenta. Croacia descont\u00F3 con Baturina y Musa. En el otro partido del Grupo L, Ghana venci\u00F3 1-0 a Panam\u00E1 con un gol de Caleb Yirenkyi en el descuento.",
+      tag:"Grupo L" },
+    { fecha:"17 jun 2026", brk:false,
+      titular:"Colombia arranca con autoridad: 3-1 a Uzbekist\u00E1n",
+      texto:"Colombia debut\u00F3 con una victoria sólida por 3-1 sobre Uzbekist\u00E1n, con Daniel Mu\u00F1oz en el marcador, y se coloca como favorita en el Grupo K junto a Portugal. Uzbekist\u00E1n, que descont\u00F3 por Fayzullayev, deber\u00E1 reaccionar.",
+      tag:"Grupo K" },
+    { fecha:"17 jun 2026", brk:false,
+      titular:"Portugal y RD Congo empatan 1-1 en el debut: Wissa hace historia",
+      texto:"Yoane Wissa marc\u00F3 con el \u00FAltimo toque de la primera parte para igualar el partido en Houston. RD Congo, que no jugaba un Mundial desde que era Zaire en 1974, consigui\u00F3 as\u00ED su primer gol en Copa del Mundo. Portugal, pese al 75% de posesi\u00F3n, no pudo resolver con Cristiano Ronaldo.",
+      tag:"Grupo K" },
+    { fecha:"17 jun 2026", brk:false,
+      titular:"Austria golea 3-1 a Jordania con Arnautovic de penal",
+      texto:"Austria empez\u00F3 fuerte en San Francisco Bay Area. Marko Arnautovic, m\u00E1ximo goleador hist\u00F3rico austriaco, cerr\u00F3 el partido desde el punto penal. Jordania descontó pero no pudo remontar. Austria lidera el Grupo J junto a Argentina.",
+      tag:"Grupo J" },
+    { fecha:"16 jun 2026", brk:true,
+      titular:"Messi hace hat-trick y rompe r\u00E9cord de Klose: 16 goles en Mundiales",
+      texto:"Lionel Messi, en su sexto Mundial, anot\u00F3 tres goles ante Argelia en Kansas City para igualar el r\u00E9cord hist\u00F3rico de Miroslav Klose (Alemania) como m\u00E1ximo goleador de la historia de la Copa del Mundo. Argentina, campeona vigente, domina el Grupo J.",
+      tag:"Grupo J" },
+    { fecha:"16 jun 2026", brk:false,
+      titular:"Mbapp\u00E9 se convierte en el m\u00E1ximo goleador hist\u00F3rico de Francia",
+      texto:"Kylian Mbapp\u00E9 marc\u00F3 dos goles ante Senegal en Nueva Jersey y super\u00F3 el r\u00E9cord hist\u00F3rico de goles con la selecci\u00F3n francesa. Francia gan\u00F3 3-1 con Michael Olise también en el marcador. El Grupo I se define entre Francia y Noruega.",
+      tag:"Grupo I" },
+    { fecha:"16 jun 2026", brk:false,
+      titular:"Haaland debuta en Mundiales con doblete: Noruega 4-1 Irak",
+      texto:"Erling Haaland vivi\u00F3 su debut en Copa del Mundo con una actuaci\u00F3n de manual: dos goles y el liderato del Grupo I compartido con Francia. Noruega, que volv\u00EDa al Mundial tras 28 a\u00F1os de ausencia, fue ampliamente superior.",
+      tag:"Grupo I" },
+    { fecha:"15 jun 2026", brk:false,
+      titular:"Cabo Verde detiene a Espa\u00F1a: 0-0 sorpresivo en Atlanta",
+      texto:"Los debutantes Cabo Verde, que se clasificaron por primera vez a un Mundial, aguantaron durante 90 minutos a la selecci\u00F3n espa\u00F1ola, n\u00FAm. 1 del ranking FIFA. Con su solidez defensiva, el equipo africano obtuvo un punto hist\u00F3rico en el Grupo H.",
+      tag:"Grupo H" },
+    { fecha:"15 jun 2026", brk:false,
+      titular:"Arabia Saudita y Uruguay empatan, Egipto y B\u00E9lgica tambi\u00E9n",
+      texto:"Cuatro empates en el d\u00EDa: Arabia Saudita fren\u00F3 a Uruguay 1-1 en Miami, mientras Egipto e igualaba con B\u00E9lgica 1-1 en Los \u00C1ngeles. El Grupo G y H quedan completamente abiertos despu\u00E9s de la primera fecha.",
+      tag:"Grupos G-H" },
+    { fecha:"14 jun 2026", brk:false,
+      titular:"Alemania golea 7-1 a Curazao, que igual\u00F3 su historia",
+      texto:"Los tetracampeones aplastaron a la debutante Curazao en Houston con goles de Nmecha, Schlotterbeck, Havertz (x2), Musiala, Nathaniel Brown y Undav. Pero la jornada tuvo su momento emotivo: Livano Comenencia convirti\u00F3 el primer gol de Curazao en una Copa del Mundo, al minuto 21.",
+      tag:"Grupo E" },
+    { fecha:"14 jun 2026", brk:false,
+      titular:"Jap\u00F3n arrebata el empate a Pa\u00EDses Bajos en el minuto 89",
+      texto:"Virgil van Dijk y Summerville pusieron arriba a Pa\u00EDses Bajos dos veces, pero Keito Nakamura (57') y Daichi Kamada (89') igualaron el partido en Dallas. El empate agónico de Kamada fue con la frente, tras un córner de Ogawa. El Grupo F, completamente abierto.",
+      tag:"Grupo F" },
+    { fecha:"14 jun 2026", brk:false,
+      titular:"Amad Diallo hunde a Ecuador en el \u00FAltimo suspiro",
+      texto:"El delantero del Manchester United anot\u00F3 al minuto 90 el \u00FAnico gol del partido en Filadelfia para darle a Costa de Marfil sus primeros tres puntos. Ecuador, que lleg\u00F3 al Mundial sin perder en sus \u00FAltimos 19 partidos, cae en su debut.",
+      tag:"Grupo E" },
+    { fecha:"14 jun 2026", brk:false,
+      titular:"Suecia debuta con goleada en Monterrey: 5-1 a T\u00FAnez",
+      texto:"Ayari (x2), Isak, Gy\u00F6k\u00E9res y Svanberg marcaron para Suecia. T\u00FAnez descontó por Omar Rekik.",
+      tag:"Grupo F" },
+    { fecha:"13 jun 2026", brk:false,
+      titular:"Qatar, su primer punto en la historia de los Mundiales",
+      texto:"Boualem Khoukhi remató de cabeza al minuto 90+4 para el hist\u00F3rico 1-1 ante Suiza. Qatar, que fue el primer anfitrión eliminado en grupos en 2022, consigue as\u00ED su primer punto mundialista.",
+      tag:"Grupo B" },
+    { fecha:"13 jun 2026", brk:false,
+      titular:"Brasil y Marruecos, golazos y un punto cada uno",
+      texto:"Ismael Saibari abri\u00F3 con un tiro bombeado sobre Alisson al minuto 21. Vinicius Jr. respondió con una jugada individual al 32'. El Grupo C queda completamente abierto.",
+      tag:"Grupo C" },
+    { fecha:"13 jun 2026", brk:false,
+      titular:"Escocia gana su primer partido mundialista desde 1990",
+      texto:"Un solitario gol de John McGinn en Foxborough le dio a Escocia su primera victoria en una Copa del Mundo en 36 a\u00F1os. Hait\u00ED volvía al Mundial por primera vez desde 1974.",
+      tag:"Grupo C" },
+    { fecha:"12 jun 2026", brk:false,
+      titular:"EE.UU. 4-1 a Paraguay: Balogun, figura en casa",
+      texto:"Folarin Balogun marc\u00F3 dos goles en Los \u00C1ngeles para consolidarse como la nueva estrella del equipo local. Reyna y McKennie tambi\u00E9n anotaron. El primer gol fue un autogol de Paraguay, forzado por Pulisic.",
+      tag:"Grupo D" },
+    { fecha:"11 jun 2026", brk:false,
+      titular:"M\u00E9xico 2-0 Sud\u00E1frica: Qui\u00F1ones y Jim\u00E9nez, y tres expulsiones en el debut",
+      texto:"Juli\u00E1n Qui\u00F1ones abri\u00F3 el marcador al minuto 9. Ra\u00FAl Jim\u00E9nez ampli\u00F3 al 67' con un cabezazo. Tres rojas en el partido: dos para Sud\u00E1frica (Sithole y Zwane) y una para M\u00E9xico (C\u00E9sar Montes).",
+      tag:"Grupo A" },
+    { fecha:"11 jun 2026", brk:false,
+      titular:"El Azteca, \u00FAnico estadio en albergar tres Copas del Mundo",
+      texto:"El Estadio Azteca, inaugurado en 1966, se convierte en el \u00FAnico recinto en recibir una Copa del Mundo por tercera vez, tras las ediciones de 1970 y 1986. La ceremonia incluy\u00F3 actuaciones de Shakira y Los \u00C1ngeles Azules.",
+      tag:"Historia" },
+  ],
+
+  /* Llave eliminatoria \u2014 se completa al cerrar la fase de grupos (27 jun) */
+  llave: {
+    /* Equipos ya clasificados a la Ronda de 32 (al 23 jun) */
+    clasificados: [
+      {name:"M\u00E9xico",flag:"mx",nota:"1.\u00BA Grupo A \u00B7 R32: 30 jun, Ciudad de M\u00E9xico"},
+      {name:"Estados Unidos",flag:"us",nota:"1.\u00BA Grupo D \u00B7 R32: 1 jul, San Francisco Bay"},
+      {name:"Alemania",flag:"de",nota:"1.\u00BA Grupo E \u00B7 R32: 29 jun, Boston"},
+      {name:"Argentina",flag:"ar",nota:"1.\u00BA Grupo J \u00B7 R32: 3 jul, Miami"},
+      {name:"Francia",flag:"fr",nota:"Clasificada (Grupo I) \u00B7 1.\u00BA/2.\u00BA se define el 26 jun"},
+      {name:"Noruega",flag:"no",nota:"Clasificada (Grupo I) \u00B7 1.\u00BA/2.\u00BA se define el 26 jun"}
+    ],
+    r32: [
+      {t1:"Alemania",f1:"de",cap:"Lun 29 jun \u00B7 Boston \u00B7 vs 3.\u00BA de A/B/C/D/F",winner:true},
+      {t1:"M\u00E9xico",f1:"mx",cap:"Mar 30 jun \u00B7 Ciudad de M\u00E9xico \u00B7 vs 3.\u00BA de C/E/F/H/I",winner:true},
+      {t1:"Estados Unidos",f1:"us",cap:"Mi\u00E9 1 jul \u00B7 San Francisco Bay \u00B7 vs 3.\u00BA de B/E/F/I/J",winner:true},
+      {t1:"Argentina",f1:"ar",cap:"Vie 3 jul \u00B7 Miami \u00B7 vs 2.\u00BA del Grupo H",winner:true},
+      null,null,null,null,null,null,null,null,null,null,null,null
+    ],
+    r16:   Array(8).fill(null),
+    qf:    Array(4).fill(null),
+    sf:    Array(2).fill(null),
+    final: [null],
+    third: [null]
+  },
+
+  /* Posiciones de grupos - actualizadas al 23 jun (2.\u00AA fecha) */
+  grupos: [
+    {letra:"A",equipos:[{flag:"[[FLAG:mx]]",name:"M\u00E9xico",pts:6,gf:3,gc:0},{flag:"[[FLAG:kr]]",name:"Corea del Sur",pts:3,gf:2,gc:2},{flag:"[[FLAG:cz]]",name:"Rep. Checa",pts:1,gf:2,gc:3},{flag:"[[FLAG:za]]",name:"Sud\u00E1frica",pts:1,gf:1,gc:3}]},
+    {letra:"B",equipos:[{flag:"[[FLAG:ca]]",name:"Canad\u00E1",pts:4,gf:7,gc:1},{flag:"[[FLAG:ch]]",name:"Suiza",pts:4,gf:5,gc:2},{flag:"[[FLAG:ba]]",name:"Bosnia-Herz.",pts:1,gf:2,gc:5},{flag:"[[FLAG:qa]]",name:"Qatar",pts:1,gf:1,gc:7}]},
+    {letra:"C",equipos:[{flag:"[[FLAG:br]]",name:"Brasil",pts:4,gf:4,gc:1},{flag:"[[FLAG:ma]]",name:"Marruecos",pts:4,gf:2,gc:1},{flag:"[[FLAG:gb-sct]]",name:"Escocia",pts:3,gf:1,gc:1},{flag:"[[FLAG:ht]]",name:"Hait\u00ED",pts:0,gf:0,gc:4}]},
+    {letra:"D",equipos:[{flag:"[[FLAG:us]]",name:"Estados Unidos",pts:6,gf:6,gc:1},{flag:"[[FLAG:au]]",name:"Australia",pts:3,gf:2,gc:2},{flag:"[[FLAG:py]]",name:"Paraguay",pts:3,gf:2,gc:4},{flag:"[[FLAG:tr]]",name:"Turqu\u00EDa",pts:0,gf:0,gc:3}]},
+    {letra:"E",equipos:[{flag:"[[FLAG:de]]",name:"Alemania",pts:6,gf:9,gc:2},{flag:"[[FLAG:ci]]",name:"Costa de Marfil",pts:3,gf:2,gc:2},{flag:"[[FLAG:ec]]",name:"Ecuador",pts:1,gf:0,gc:1},{flag:"[[FLAG:cw]]",name:"Curazao",pts:1,gf:1,gc:7}]},
+    {letra:"F",equipos:[{flag:"[[FLAG:nl]]",name:"Pa\u00EDses Bajos",pts:4,gf:7,gc:3},{flag:"[[FLAG:jp]]",name:"Jap\u00F3n",pts:4,gf:6,gc:2},{flag:"[[FLAG:se]]",name:"Suecia",pts:3,gf:6,gc:6},{flag:"[[FLAG:tn]]",name:"T\u00FAnez",pts:0,gf:1,gc:9}]},
+    {letra:"G",equipos:[{flag:"[[FLAG:eg]]",name:"Egipto",pts:4,gf:4,gc:2},{flag:"[[FLAG:ir]]",name:"Ir\u00E1n",pts:2,gf:2,gc:2},{flag:"[[FLAG:be]]",name:"B\u00E9lgica",pts:2,gf:1,gc:1},{flag:"[[FLAG:nz]]",name:"Nueva Zelanda",pts:1,gf:3,gc:5}]},
+    {letra:"H",equipos:[{flag:"[[FLAG:es]]",name:"Espa\u00F1a",pts:4,gf:4,gc:0},{flag:"[[FLAG:uy]]",name:"Uruguay",pts:2,gf:3,gc:3},{flag:"[[FLAG:cv]]",name:"Cabo Verde",pts:2,gf:2,gc:2},{flag:"[[FLAG:sa]]",name:"Arabia Saudita",pts:1,gf:1,gc:5}]},
+    {letra:"I",equipos:[{flag:"[[FLAG:fr]]",name:"Francia",pts:6,gf:6,gc:1},{flag:"[[FLAG:no]]",name:"Noruega",pts:6,gf:7,gc:3},{flag:"[[FLAG:sn]]",name:"Senegal",pts:0,gf:3,gc:6},{flag:"[[FLAG:iq]]",name:"Irak",pts:0,gf:1,gc:7}]},
+    {letra:"J",equipos:[{flag:"[[FLAG:ar]]",name:"Argentina",pts:6,gf:5,gc:0},{flag:"[[FLAG:at]]",name:"Austria",pts:3,gf:3,gc:3},{flag:"[[FLAG:dz]]",name:"Argelia",pts:3,gf:2,gc:4},{flag:"[[FLAG:jo]]",name:"Jordania",pts:0,gf:2,gc:5}]},
+    {letra:"K",equipos:[{flag:"[[FLAG:pt]]",name:"Portugal",pts:4,gf:6,gc:1},{flag:"[[FLAG:co]]",name:"Colombia",pts:3,gf:3,gc:1},{flag:"[[FLAG:cd]]",name:"RD Congo",pts:1,gf:1,gc:1},{flag:"[[FLAG:uz]]",name:"Uzbekist\u00E1n",pts:0,gf:1,gc:8}]},
+    {letra:"L",equipos:[{flag:"[[FLAG:gb-eng]]",name:"Inglaterra",pts:4,gf:4,gc:2},{flag:"[[FLAG:gh]]",name:"Ghana",pts:4,gf:1,gc:0},{flag:"[[FLAG:hr]]",name:"Croacia",pts:3,gf:3,gc:4},{flag:"[[FLAG:pa]]",name:"Panam\u00E1",pts:0,gf:0,gc:2}]}
+  ]
+};
+/* ================================================================ */
+
+/* EQUIPOS - base de datos relacional */
+const EQUIPOS = [
+/* ── GRUPO A ── */
+{id:"mex",name:"México",flag:"[[FLAG:mx]]",grupo:"A",color:"#006847",coach:"Javier Aguirre",
+ plantel:[
+  {num:1,nombre:"Raúl Rangel",pos:"Portero",club:"Chivas"},
+  {num:13,nombre:"Guillermo Ochoa",pos:"Portero",club:"AEL Limassol"},
+  {num:22,nombre:"Carlos Acevedo",pos:"Portero",club:"Santos Laguna"},
+  {num:4,nombre:"César Montes",pos:"Defensa",club:"Lokomotiv"},
+  {num:6,nombre:"Edson Álvarez",pos:"Defensa",club:"Fenerbahce"},
+  {num:3,nombre:"Israel Reyes",pos:"Defensa",club:"América"},
+  {num:23,nombre:"Jesús Gallardo",pos:"Defensa",club:"Toluca"},
+  {num:25,nombre:"Mateo Chávez",pos:"Defensa",club:"AZ Alkmaar"},
+  {num:2,nombre:"Jorge Sánchez",pos:"Defensa",club:"PAOK"},
+  {num:5,nombre:"Johan Vásquez",pos:"Defensa",club:"Genoa"},
+  {num:8,nombre:"Erik Lira",pos:"Mediocampista",club:"Cruz Azul"},
+  {num:17,nombre:"Gilberto Mora",pos:"Mediocampista",club:"Tijuana"},
+  {num:11,nombre:"Brian Gutiérrez",pos:"Mediocampista",club:"Chivas"},
+  {num:15,nombre:"Luis Romo",pos:"Mediocampista",club:"Chivas"},
+  {num:14,nombre:"Orbelín Pineda",pos:"Mediocampista",club:"AEK Atenas"},
+  {num:10,nombre:"Álvaro Fidalgo",pos:"Mediocampista",club:"Real Betis"},
+  {num:18,nombre:"Luis Chávez",pos:"Mediocampista",club:"Dinamo Moscú"},
+  {num:20,nombre:"Obed Vargas",pos:"Mediocampista",club:"Atlético de Madrid"},
+  {num:19,nombre:"Roberto Alvarado",pos:"Mediocampista",club:"Chivas"},
+  {num:9,nombre:"Raúl Jiménez",pos:"Delantero",club:"Fulham"},
+  {num:24,nombre:"Guillermo Martínez",pos:"Delantero",club:"Pumas"},
+  {num:12,nombre:"Santiago Giménez",pos:"Delantero",club:"AC Milán"},
+  {num:26,nombre:"Armando González",pos:"Delantero",club:"Chivas"},
+  {num:7,nombre:"Julián Quiñones",pos:"Delantero",club:"Al-Qadsiah"},
+  {num:16,nombre:"Alexis Vega",pos:"Delantero",club:"Toluca"},
+  {num:21,nombre:"César Huerta",pos:"Delantero",club:"Anderlecht"},
+]},
+{id:"zaf",name:"Sudáfrica",flag:"[[FLAG:za]]",grupo:"A",color:"#007A4D",coach:"Hugo Broos",
+ plantel:[
+  {num:1,nombre:"Ronwen Williams",pos:"Portero",club:"Mamelodi Sundowns"},
+  {num:12,nombre:"Ricardo Goss",pos:"Portero",club:"SuperSport United"},
+  {num:23,nombre:"Sipho Chaine",pos:"Portero",club:"Orlando Pirates"},
+  {num:2,nombre:"Khuliso Mudau",pos:"Defensa",club:"Mamelodi Sundowns"},
+  {num:5,nombre:"Olwethu Makhanya",pos:"Defensa",club:"Philadelphia Union"},
+  {num:6,nombre:"Bradley Cross",pos:"Defensa",club:"Kaizer Chiefs"},
+  {num:3,nombre:"Aubrey Modiba",pos:"Defensa",club:"Mamelodi Sundowns"},
+  {num:14,nombre:"Thabang Matuludi",pos:"Defensa",club:"Polokwane City"},
+  {num:15,nombre:"Nkosinathi Sibisi",pos:"Defensa",club:"Orlando Pirates"},
+  {num:4,nombre:"Khulumani Ndamane",pos:"Defensa",club:"Mamelodi Sundowns"},
+  {num:21,nombre:"Ime Okon",pos:"Defensa",club:"Hannover 96"},
+  {num:22,nombre:"Samukele Kabini",pos:"Defensa",club:"Molde FK"},
+  {num:24,nombre:"Mbekezeli Mbokazi",pos:"Defensa",club:"Chicago Fire"},
+  {num:20,nombre:"Kamogelo Sebelebele",pos:"Defensa",club:"Orlando Pirates"},
+  {num:8,nombre:"Teboho Mokoena",pos:"Mediocampista",club:"Mamelodi Sundowns"},
+  {num:7,nombre:"Jayden Adams",pos:"Mediocampista",club:"Mamelodi Sundowns"},
+  {num:11,nombre:"Thalente Mbatha",pos:"Mediocampista",club:"Orlando Pirates"},
+  {num:16,nombre:"Sphephelo Sithole",pos:"Mediocampista",club:"Tondela"},
+  {num:17,nombre:"Oswin Appollis",pos:"Delantero",club:"Polokwane City"},
+  {num:18,nombre:"Tshepang Moremi",pos:"Delantero",club:"Orlando Pirates"},
+  {num:9,nombre:"Evidence Makgopa",pos:"Delantero",club:"Orlando Pirates"},
+  {num:13,nombre:"Lyle Foster",pos:"Delantero",club:"Burnley"},
+  {num:19,nombre:"Iqraam Rayners",pos:"Delantero",club:"Mamelodi Sundowns"},
+  {num:10,nombre:"Relebohile Mofokeng",pos:"Delantero",club:"Orlando Pirates"},
+  {num:25,nombre:"Themba Zwane",pos:"Delantero",club:"Mamelodi Sundowns"},
+  {num:26,nombre:"Thapelo Maseko",pos:"Delantero",club:"Mamelodi Sundowns"},
+]},
+{id:"kor",name:"Corea del Sur",flag:"[[FLAG:kr]]",grupo:"A",color:"#CD2E3A",coach:"Hong Myung-bo",
+ plantel:[
+  {num:21,nombre:"Song Bum-keun",pos:"Portero",club:"Jeonbuk"},
+  {num:1,nombre:"Jo Hyeon-woo",pos:"Portero",club:"Ulsan HD"},
+  {num:31,nombre:"Kim Seung-gyu",pos:"Portero",club:"FC Tokyo"},
+  {num:13,nombre:"Jens Castrop",pos:"Defensa",club:"B. Mönchengladbach"},
+  {num:24,nombre:"Lee Han-beom",pos:"Defensa",club:"Midtjylland"},
+  {num:5,nombre:"Park Jin-seob",pos:"Defensa",club:"Zhejiang FC"},
+  {num:19,nombre:"Lee Ki-hyuk",pos:"Defensa",club:"Gangwon FC"},
+  {num:3,nombre:"Kim Min-jae",pos:"Defensa",club:"Bayern Munich"},
+  {num:2,nombre:"Kim Moon-hwan",pos:"Defensa",club:"Daejeon"},
+  {num:4,nombre:"Kim Tae-hyon",pos:"Defensa",club:"Kashima Antlers"},
+  {num:20,nombre:"Lee Tae-seok",pos:"Defensa",club:"FK Austria Wien"},
+  {num:23,nombre:"Seol Young-woo",pos:"Defensa",club:"Estrella Roja"},
+  {num:16,nombre:"Yang Hyun-jun",pos:"Mediocampista",club:"Celtic"},
+  {num:17,nombre:"Hwang Hee-chan",pos:"Mediocampista",club:"Wolverhampton"},
+  {num:6,nombre:"Kim Jin-gyu",pos:"Mediocampista",club:"Jeonbuk"},
+  {num:14,nombre:"Bae Jun-ho",pos:"Mediocampista",club:"Stoke City"},
+  {num:22,nombre:"Lee Dong-gyeong",pos:"Mediocampista",club:"Ulsan HD"},
+  {num:15,nombre:"Eom Ji-sung",pos:"Mediocampista",club:"Swansea City"},
+  {num:8,nombre:"Hwang In-beom",pos:"Mediocampista",club:"Feyenoord"},
+  {num:11,nombre:"Lee Jae-sung",pos:"Mediocampista",club:"Mainz 05"},
+  {num:18,nombre:"Paik Seung-ho",pos:"Mediocampista",club:"Birmingham"},
+  {num:10,nombre:"Lee Kang-in",pos:"Mediocampista",club:"Paris Saint-Germain"},
+  {num:9,nombre:"Cho Gue-sung",pos:"Delantero",club:"Midtjylland"},
+  {num:7,nombre:"Son Heung-min",pos:"Delantero",club:"LAFC"},
+  {num:25,nombre:"Oh Hyeon-gyu",pos:"Delantero",club:"Besiktas"},
+]},
+{id:"cze",name:"Rep. Checa",flag:"[[FLAG:cz]]",grupo:"A",color:"#D7141A",coach:"Miroslav Koubek",
+ plantel:[
+  {num:1,nombre:"Lukas Hornicek",pos:"Portero",club:"Sporting Braga"},
+  {num:23,nombre:"Matej Kovar",pos:"Portero",club:"PSV Eindhoven"},
+  {num:12,nombre:"Jindrich Stanek",pos:"Portero",club:"Slavia Praga"},
+  {num:2,nombre:"Vladimir Coufal",pos:"Defensa",club:"Hoffenheim"},
+  {num:3,nombre:"David Doudera",pos:"Defensa",club:"Slavia Praga"},
+  {num:4,nombre:"Tomas Holes",pos:"Defensa",club:"Slavia Praga"},
+  {num:5,nombre:"Robin Hranac",pos:"Defensa",club:"Hoffenheim"},
+  {num:14,nombre:"Stepan Chaloupek",pos:"Defensa",club:"Slavia Praga"},
+  {num:15,nombre:"David Jurasek",pos:"Defensa",club:"Slavia Praga"},
+  {num:6,nombre:"Ladislav Krejci",pos:"Defensa",club:"Wolverhampton"},
+  {num:22,nombre:"Jaroslav Zeleny",pos:"Defensa",club:"Sparta Praga"},
+  {num:25,nombre:"David Zima",pos:"Defensa",club:"Slavia Praga"},
+  {num:7,nombre:"Lukas Cerv",pos:"Mediocampista",club:"Viktoria Plzen"},
+  {num:8,nombre:"Vladimir Darida",pos:"Mediocampista",club:"Hradec Králové"},
+  {num:11,nombre:"Lukas Provod",pos:"Mediocampista",club:"Slavia Praga"},
+  {num:16,nombre:"Michal Sadilek",pos:"Mediocampista",club:"Slavia Praga"},
+  {num:17,nombre:"Hugo Sochurek",pos:"Mediocampista",club:"Sparta Praga"},
+  {num:18,nombre:"Alexandr Sojka",pos:"Mediocampista",club:"Viktoria Plzen"},
+  {num:10,nombre:"Tomas Soucek",pos:"Mediocampista",club:"West Ham"},
+  {num:19,nombre:"Pavel Sulc",pos:"Mediocampista",club:"Olympique Lyon"},
+  {num:20,nombre:"Denis Visinsky",pos:"Mediocampista",club:"Viktoria Plzen"},
+  {num:13,nombre:"Adam Hlozek",pos:"Delantero",club:"Hoffenheim"},
+  {num:21,nombre:"Tomas Chory",pos:"Delantero",club:"Slavia Praga"},
+  {num:26,nombre:"Mojmir Chytil",pos:"Delantero",club:"Slavia Praga"},
+  {num:24,nombre:"Jan Kuchta",pos:"Delantero",club:"Sparta Praga"},
+  {num:9,nombre:"Patrik Schick",pos:"Delantero",club:"Bayer Leverkusen"},
+]},
+/* ── GRUPO B ── */
+{id:"can",name:"Canadá",flag:"[[FLAG:ca]]",grupo:"B",color:"#FF0000",coach:"Jesse Marsch",
+ plantel:[
+  {num:1,nombre:"Dayne St Clair",pos:"Portero",club:"Inter Miami"},
+  {num:18,nombre:"Maxime Crépeau",pos:"Portero",club:"Orlando City"},
+  {num:23,nombre:"Owen Goodman",pos:"Portero",club:"Barnsley"},
+  {num:2,nombre:"Alistair Johnston",pos:"Defensa",club:"Celtic"},
+  {num:3,nombre:"Derek Cornelius",pos:"Defensa",club:"Rangers FC"},
+  {num:4,nombre:"Richie Laryea",pos:"Defensa",club:"Toronto FC"},
+  {num:5,nombre:"Niko Sigur",pos:"Defensa",club:"Hajduk Split"},
+  {num:6,nombre:"Joel Waterman",pos:"Defensa",club:"Chicago Fire"},
+  {num:12,nombre:"Luc de Fougerolles",pos:"Defensa",club:"FCV Dender EH"},
+  {num:14,nombre:"Moïse Bombito",pos:"Defensa",club:"OGC Niza"},
+  {num:19,nombre:"Alphonso Davies",pos:"Defensa",club:"Bayern Munich"},
+  {num:21,nombre:"Alfie Jones",pos:"Defensa",club:"Middlesbrough"},
+  {num:8,nombre:"Stephen Eustáquio",pos:"Mediocampista",club:"Los Angeles FC"},
+  {num:7,nombre:"Ismaël Koné",pos:"Mediocampista",club:"Sassuolo"},
+  {num:11,nombre:"Tajon Buchanan",pos:"Mediocampista",club:"Villarreal"},
+  {num:15,nombre:"Mathieu Choinière",pos:"Mediocampista",club:"Los Angeles FC"},
+  {num:16,nombre:"Ali Ahmed",pos:"Mediocampista",club:"Norwich City"},
+  {num:17,nombre:"Nathan Saliba",pos:"Mediocampista",club:"Anderlecht"},
+  {num:20,nombre:"Liam Millar",pos:"Mediocampista",club:"Hull City"},
+  {num:22,nombre:"Jacob Shaffelburg",pos:"Mediocampista",club:"Los Angeles FC"},
+  {num:24,nombre:"Jonathan Osorio",pos:"Mediocampista",club:"Toronto FC"},
+  {num:9,nombre:"Jonathan David",pos:"Delantero",club:"Juventus"},
+  {num:10,nombre:"Cyle Larin",pos:"Delantero",club:"Southampton"},
+  {num:13,nombre:"Tani Oluwaseyi",pos:"Delantero",club:"Villarreal"},
+  {num:25,nombre:"Promise David",pos:"Delantero",club:"Union SG"},
+]},
+{id:"bih",name:"Bosnia-Herz.",flag:"[[FLAG:ba]]",grupo:"B",color:"#002395",coach:"Sergej Barbarez",
+ plantel:[
+  {num:1,nombre:"Nikola Vasilj",pos:"Portero",club:"FC St. Pauli"},
+  {num:12,nombre:"Martin Zlomislic",pos:"Portero",club:"HNK Rijeka"},
+  {num:23,nombre:"Osman Hadzikic",pos:"Portero",club:"Slaven Belupo"},
+  {num:2,nombre:"Sead Kolasinac",pos:"Defensa",club:"Atalanta"},
+  {num:3,nombre:"Amar Dedic",pos:"Defensa",club:"Benfica"},
+  {num:4,nombre:"Nihad Mujakic",pos:"Defensa",club:"Gaziantep FK"},
+  {num:5,nombre:"Nikola Katic",pos:"Defensa",club:"Schalke 04"},
+  {num:14,nombre:"Tarik Muharemovic",pos:"Defensa",club:"Sassuolo"},
+  {num:15,nombre:"Stjepan Radeljic",pos:"Defensa",club:"HNK Rijeka"},
+  {num:22,nombre:"Dennis Hadzikadunic",pos:"Defensa",club:"Sampdoria"},
+  {num:25,nombre:"Nidal Celik",pos:"Defensa",club:"RC Lens"},
+  {num:6,nombre:"Amir Hadziahmetovic",pos:"Mediocampista",club:"Hull City"},
+  {num:7,nombre:"Ivan Sunjic",pos:"Mediocampista",club:"Pafos FC"},
+  {num:8,nombre:"Ivan Basic",pos:"Mediocampista",club:"FC Astana"},
+  {num:11,nombre:"Dzenis Burnic",pos:"Mediocampista",club:"Karlsruher SC"},
+  {num:13,nombre:"Ermin Mahmic",pos:"Mediocampista",club:"Slovan Liberec"},
+  {num:16,nombre:"Benjamin Tahirovic",pos:"Mediocampista",club:"Brøndby IF"},
+  {num:17,nombre:"Amar Memic",pos:"Mediocampista",club:"Viktoria Plzen"},
+  {num:18,nombre:"Armin Gigovic",pos:"Mediocampista",club:"Young Boys"},
+  {num:19,nombre:"Kerim Alajbegovic",pos:"Mediocampista",club:"RB Salzburg"},
+  {num:20,nombre:"Esmir Bajraktarevic",pos:"Mediocampista",club:"PSV Eindhoven"},
+  {num:9,nombre:"Ermedin Demirovic",pos:"Delantero",club:"VfB Stuttgart"},
+  {num:21,nombre:"Jovo Lukic",pos:"Delantero",club:"Universitatea Cluj"},
+  {num:24,nombre:"Samed Bazdar",pos:"Delantero",club:"Jagiellonia"},
+  {num:26,nombre:"Haris Tabakovic",pos:"Delantero",club:"B. Mönchengladbach"},
+  {num:10,nombre:"Edin Dzeko",pos:"Delantero",club:"Schalke 04"},
+]},
+{id:"qat",name:"Qatar",flag:"[[FLAG:qa]]",grupo:"B",color:"#8D1B3D",coach:"Julen Lopetegui",
+ plantel:[
+  {num:1,nombre:"Mahmud Abunada",pos:"Portero",club:"Al-Rayyan"},
+  {num:12,nombre:"Meshaal Barsham",pos:"Portero",club:"Al-Sadd"},
+  {num:23,nombre:"Salah Zakaria",pos:"Portero",club:"Al-Duhail"},
+  {num:2,nombre:"Ayoub Al Alawi",pos:"Defensa",club:"Al-Gharafa"},
+  {num:5,nombre:"Boualem Khoukhi",pos:"Defensa",club:"Al-Sadd"},
+  {num:3,nombre:"Homan Al Amin",pos:"Defensa",club:"Cultural Leonesa"},
+  {num:4,nombre:"Lucas Mendes",pos:"Defensa",club:"Al-Wakrah"},
+  {num:14,nombre:"Issa Laye",pos:"Defensa",club:"Al-Arabi"},
+  {num:6,nombre:"Pedro Miguel",pos:"Defensa",club:"Al-Sadd"},
+  {num:15,nombre:"Sultan Al-Brake",pos:"Defensa",club:"Al-Duhail"},
+  {num:8,nombre:"Assim Madibo",pos:"Mediocampista",club:"Al-Duhail"},
+  {num:16,nombre:"Abdulaziz Hatem",pos:"Mediocampista",club:"Al-Rayyan"},
+  {num:17,nombre:"Ahmed Fatehi",pos:"Mediocampista",club:"Al-Arabi"},
+  {num:18,nombre:"Karim Boudiaf",pos:"Mediocampista",club:"Al-Duhail"},
+  {num:19,nombre:"Jassim Gaber",pos:"Mediocampista",club:"Al-Rayyan"},
+  {num:20,nombre:"Mohamed Mannai",pos:"Mediocampista",club:"Al-Shamal"},
+  {num:7,nombre:"Ahmed Al Ganehi",pos:"Delantero",club:"Al-Gharafa"},
+  {num:9,nombre:"Akram Afif",pos:"Delantero",club:"Al-Sadd"},
+  {num:10,nombre:"Almoez Ali",pos:"Delantero",club:"Al-Duhail"},
+  {num:11,nombre:"Edmilson Junior",pos:"Delantero",club:"Al-Duhail"},
+  {num:22,nombre:"Hassan Al-Haidos",pos:"Delantero",club:"Al-Sadd"},
+  {num:13,nombre:"Mohammed Muntari",pos:"Delantero",club:"Al-Gharafa"},
+  {num:24,nombre:"Yusuf Abdurisag",pos:"Delantero",club:"Al-Wakrah"},
+]},
+{id:"sui",name:"Suiza",flag:"[[FLAG:ch]]",grupo:"B",color:"#FF0000",coach:"Murat Yakin",
+ plantel:[
+  {num:1,nombre:"Gregor Kobel",pos:"Portero",club:"Borussia Dortmund"},
+  {num:12,nombre:"Yvon Mvogo",pos:"Portero",club:"FC Lorient"},
+  {num:23,nombre:"Marvin Keller",pos:"Portero",club:"Young Boys"},
+  {num:5,nombre:"Manuel Akanji",pos:"Defensa",club:"Manchester City"},
+  {num:20,nombre:"Aurèle Amenda",pos:"Defensa",club:"Eintracht Frankfurt"},
+  {num:3,nombre:"Eray Cömert",pos:"Defensa",club:"Valencia"},
+  {num:2,nombre:"Nico Elvedi",pos:"Defensa",club:"B. Mönchengladbach"},
+  {num:13,nombre:"Lucas Jaquez",pos:"Defensa",club:"Real Madrid"},
+  {num:22,nombre:"Miro Muheim",pos:"Defensa",club:"Hamburg SV"},
+  {num:13,nombre:"Ricardo Rodríguez",pos:"Defensa",club:"Torino"},
+  {num:15,nombre:"Silvan Widmer",pos:"Defensa",club:"Mainz 05"},
+  {num:10,nombre:"Granit Xhaka",pos:"Mediocampista",club:"Bayer Leverkusen"},
+  {num:8,nombre:"Michel Aebischer",pos:"Mediocampista",club:"Bologna"},
+  {num:6,nombre:"Christian Fassnacht",pos:"Mediocampista",club:"Union Berlin"},
+  {num:16,nombre:"Remo Freuler",pos:"Mediocampista",club:"Nottingham Forest"},
+  {num:17,nombre:"Ardon Jashari",pos:"Mediocampista",club:"Club Brugge"},
+  {num:14,nombre:"Johan Manzambi",pos:"Mediocampista",club:"PAOK"},
+  {num:18,nombre:"Fabian Rieder",pos:"Mediocampista",club:"Rennes"},
+  {num:19,nombre:"Djibril Sow",pos:"Mediocampista",club:"Sevilla"},
+  {num:11,nombre:"Rubén Vargas",pos:"Mediocampista",club:"Augsburg"},
+  {num:21,nombre:"Denis Zakaria",pos:"Mediocampista",club:"AS Monaco"},
+  {num:7,nombre:"Zeki Amdouni",pos:"Delantero",club:"Burnley"},
+  {num:9,nombre:"Breel Embolo",pos:"Delantero",club:"AS Monaco"},
+  {num:25,nombre:"Cédric Itten",pos:"Delantero",club:"Young Boys"},
+  {num:24,nombre:"Dan Ndoye",pos:"Delantero",club:"Bologna"},
+  {num:26,nombre:"Noah Okafor",pos:"Delantero",club:"RB Leipzig"},
+]},
+/* ── GRUPO C ── */
+{id:"bra",name:"Brasil",flag:"[[FLAG:br]]",grupo:"C",color:"#009C3B",coach:"Carlo Ancelotti",
+ plantel:[
+  {num:1,nombre:"Alisson",pos:"Portero",club:"Liverpool"},
+  {num:23,nombre:"Ederson",pos:"Portero",club:"Manchester City"},
+  {num:12,nombre:"Weverton",pos:"Portero",club:"Palmeiras"},
+  {num:2,nombre:"Danilo",pos:"Defensa",club:"Juventus"},
+  {num:22,nombre:"Wesley",pos:"Defensa",club:"Aston Villa"},
+  {num:4,nombre:"Marquinhos",pos:"Defensa",club:"PSG"},
+  {num:3,nombre:"Gabriel Magalhães",pos:"Defensa",club:"Arsenal"},
+  {num:14,nombre:"Léo Pereira",pos:"Defensa",club:"Flamengo"},
+  {num:6,nombre:"Bremer",pos:"Defensa",club:"Juventus"},
+  {num:26,nombre:"Ibáñez",pos:"Defensa",club:"Al-Qadsiah"},
+  {num:6,nombre:"Alex Sandro",pos:"Defensa",club:"Flamengo"},
+  {num:19,nombre:"Douglas Santos",pos:"Defensa",club:"Zenit"},
+  {num:5,nombre:"Casemiro",pos:"Mediocampista",club:"Manchester United"},
+  {num:15,nombre:"Bruno Guimarães",pos:"Mediocampista",club:"Newcastle"},
+  {num:18,nombre:"Lucas Paquetá",pos:"Mediocampista",club:"West Ham"},
+  {num:16,nombre:"Fabinho",pos:"Mediocampista",club:"Al-Ittihad"},
+  {num:7,nombre:"Vinícius Júnior",pos:"Delantero",club:"Real Madrid"},
+  {num:19,nombre:"Matheus Cunha",pos:"Delantero",club:"Wolverhampton"},
+  {num:10,nombre:"Neymar Jr.",pos:"Delantero",club:"Al-Hilal"},
+  {num:11,nombre:"Raphinha",pos:"Delantero",club:"Barcelona"},
+  {num:25,nombre:"Rayan",pos:"Delantero",club:"PSG"},
+  {num:24,nombre:"Igor Thiago",pos:"Delantero",club:"Club Brugge"},
+  {num:13,nombre:"Luiz Henrique",pos:"Delantero",club:"Botafogo"},
+  {num:9,nombre:"Gabriel Martinelli",pos:"Delantero",club:"Arsenal"},
+  {num:17,nombre:"Endrick",pos:"Delantero",club:"Real Madrid"},
+]},
+{id:"mar",name:"Marruecos",flag:"[[FLAG:ma]]",grupo:"C",color:"#006233",coach:"Walid Regragui",
+ plantel:[
+  {num:1,nombre:"Yassine Bounou",pos:"Portero",club:"Al-Hilal"},
+  {num:16,nombre:"Munir",pos:"Portero",club:"Real Betis"},
+  {num:23,nombre:"Anas Zniti",pos:"Portero",club:"FUS Rabat"},
+  {num:2,nombre:"Achraf Hakimi",pos:"Defensa",club:"PSG"},
+  {num:3,nombre:"Noussair Mazraoui",pos:"Defensa",club:"Manchester United"},
+  {num:5,nombre:"Nayef Aguerd",pos:"Defensa",club:"Real Sociedad"},
+  {num:6,nombre:"Romain Saïss",pos:"Defensa",club:"Al-Qadsiah"},
+  {num:22,nombre:"Yahia Attiyat Allah",pos:"Defensa",club:"RS Berkane"},
+  {num:13,nombre:"Jawad El Yamiq",pos:"Defensa",club:"Real Valladolid"},
+  {num:21,nombre:"Hamza Mendyl",pos:"Defensa",club:"Besiktas"},
+  {num:4,nombre:"Sofyan Amrabat",pos:"Mediocampista",club:"Fiorentina"},
+  {num:8,nombre:"Azzedine Ounahi",pos:"Mediocampista",club:"Marseille"},
+  {num:14,nombre:"Ilias Chair",pos:"Mediocampista",club:"QPR"},
+  {num:19,nombre:"Selim Amallah",pos:"Mediocampista",club:"Standard Lieja"},
+  {num:18,nombre:"Bilal El Khannouss",pos:"Mediocampista",club:"Leicester City"},
+  {num:17,nombre:"Abdessamad Ezzalzouli",pos:"Mediocampista",club:"Betis"},
+  {num:7,nombre:"Hakim Ziyech",pos:"Delantero",club:"Galatasaray"},
+  {num:9,nombre:"Youssef En-Nesyri",pos:"Delantero",club:"Fenerbahce"},
+  {num:10,nombre:"Brahim Díaz",pos:"Delantero",club:"Real Madrid"},
+  {num:11,nombre:"Sofiane Boufal",pos:"Delantero",club:"Al-Qadsiah"},
+  {num:15,nombre:"Amine Harit",pos:"Delantero",club:"Marseille"},
+  {num:20,nombre:"Zakaria Aboukhlal",pos:"Delantero",club:"Toulouse"},
+  {num:24,nombre:"Anass Zaroury",pos:"Delantero",club:"Burnley"},
+]},
+{id:"hai",name:"Haití",flag:"[[FLAG:ht]]",grupo:"C",color:"#003087",coach:"Sébastien Migné",
+ plantel:[
+  {num:1,nombre:"Jhony Placide",pos:"Portero",club:"Laval"},
+  {num:12,nombre:"Alexandre Pierre",pos:"Portero",club:"Dijon"},
+  {num:23,nombre:"Josue Duverger",pos:"Portero",club:"Arcahaie FC"},
+  {num:3,nombre:"Carlens Arcus",pos:"Defensa",club:"Clermont Foot"},
+  {num:5,nombre:"Wilguens Paugain",pos:"Defensa",club:"FK Bodo/Glimt"},
+  {num:4,nombre:"Duke Lacroix",pos:"Defensa",club:"Ferencváros"},
+  {num:6,nombre:"Martin Experience",pos:"Defensa",club:"SC Braga"},
+  {num:2,nombre:"Jean-Kévin Duverne",pos:"Defensa",club:"Troyes"},
+  {num:13,nombre:"Ricardo Adé",pos:"Defensa",club:"Zulte Waregem"},
+  {num:14,nombre:"Hannes Delcroix",pos:"Defensa",club:"RSC Anderlecht"},
+  {num:15,nombre:"Keeto Thermoncy",pos:"Defensa",club:"Chabab Mohammédia"},
+  {num:8,nombre:"Carl Fred Sainté",pos:"Mediocampista",club:"Racing Club Strasbourg"},
+  {num:16,nombre:"Leverton Pierre",pos:"Mediocampista",club:"HB Torshavn"},
+  {num:17,nombre:"Danley Jean Jacques",pos:"Mediocampista",club:"Le Havre"},
+  {num:10,nombre:"Jean-Ricner Bellegarde",pos:"Mediocampista",club:"RC Strasbourg"},
+  {num:18,nombre:"Woodensky Pierre",pos:"Mediocampista",club:"FC Schalke 04"},
+  {num:19,nombre:"Dominique Simon",pos:"Mediocampista",club:"Athlético Marseille"},
+  {num:20,nombre:"Don Deedson Louicius",pos:"Delantero",club:"AEK Larnaca"},
+  {num:11,nombre:"Wilson Isidor",pos:"Delantero",club:"Sporting CP"},
+  {num:9,nombre:"Duckens Nazon",pos:"Delantero",club:"NEC Nijmegen"},
+  {num:21,nombre:"Derrick Etienne",pos:"Delantero",club:"New York City FC"},
+  {num:7,nombre:"Frantzdy Pierrot",pos:"Delantero",club:"Piast Gliwice"},
+  {num:22,nombre:"Lenny Joseph",pos:"Delantero",club:"FC Dallas"},
+]},
+{id:"sco",name:"Escocia",flag:"[[FLAG:gb-sct]]",grupo:"C",color:"#003580",coach:"Steve Clarke",
+ plantel:[
+  {num:1,nombre:"Craig Gordon",pos:"Portero",club:"Heart of Midlothian"},
+  {num:12,nombre:"Angus Gunn",pos:"Portero",club:"Norwich City"},
+  {num:23,nombre:"Liam Kelly",pos:"Portero",club:"Coventry City"},
+  {num:5,nombre:"Grant Hanley",pos:"Defensa",club:"Norwich City"},
+  {num:6,nombre:"Jack Hendry",pos:"Defensa",club:"Club Brugge"},
+  {num:2,nombre:"Aaron Hickey",pos:"Defensa",club:"Brentford"},
+  {num:14,nombre:"Dominic Hyam",pos:"Defensa",club:"QPR"},
+  {num:15,nombre:"Scott McKenna",pos:"Defensa",club:"Nottingham Forest"},
+  {num:22,nombre:"Nathan Patterson",pos:"Defensa",club:"Everton"},
+  {num:3,nombre:"Anthony Ralston",pos:"Defensa",club:"Celtic"},
+  {num:16,nombre:"Andy Robertson",pos:"Defensa",club:"Liverpool"},
+  {num:4,nombre:"John Souttar",pos:"Defensa",club:"Rangers"},
+  {num:17,nombre:"Kieran Tierney",pos:"Defensa",club:"Real Sociedad"},
+  {num:8,nombre:"Ryan Christie",pos:"Mediocampista",club:"Bournemouth"},
+  {num:18,nombre:"Lewis Ferguson",pos:"Mediocampista",club:"Bologna"},
+  {num:19,nombre:"Billy Gilmour",pos:"Mediocampista",club:"Brighton"},
+  {num:7,nombre:"John McGinn",pos:"Mediocampista",club:"Aston Villa"},
+  {num:20,nombre:"Kenny McLean",pos:"Mediocampista",club:"Norwich City"},
+  {num:10,nombre:"Scott McTominay",pos:"Mediocampista",club:"Napoli"},
+  {num:11,nombre:"Che Adams",pos:"Delantero",club:"Torino"},
+  {num:9,nombre:"Lyndon Dykes",pos:"Delantero",club:"QPR"},
+  {num:21,nombre:"Lawrence Shankland",pos:"Delantero",club:"Heart of Midlothian"},
+  {num:24,nombre:"Ross Stewart",pos:"Delantero",club:"Southampton"},
+]},
+/* ── GRUPO D ── */
+{id:"usa",name:"Estados Unidos",flag:"[[FLAG:us]]",grupo:"D",color:"#B22222",coach:"Mauricio Pochettino",
+ plantel:[
+  {num:1,nombre:"Matt Freese",pos:"Portero",club:"NYCFC"},
+  {num:12,nombre:"Matt Turner",pos:"Portero",club:"Crystal Palace"},
+  {num:23,nombre:"Chris Brady",pos:"Portero",club:"Bournemouth"},
+  {num:2,nombre:"Sergiño Dest",pos:"Defensa",club:"PSV Eindhoven"},
+  {num:3,nombre:"Antonee Robinson",pos:"Defensa",club:"Fulham"},
+  {num:4,nombre:"Chris Richards",pos:"Defensa",club:"Crystal Palace"},
+  {num:5,nombre:"Tim Ream",pos:"Defensa",club:"Fulham"},
+  {num:6,nombre:"Mark McKenzie",pos:"Defensa",club:"Genk"},
+  {num:14,nombre:"Miles Robinson",pos:"Defensa",club:"Atlanta United"},
+  {num:22,nombre:"Joe Scally",pos:"Defensa",club:"B. Mönchengladbach"},
+  {num:15,nombre:"Auston Trusty",pos:"Defensa",club:"Sheffield United"},
+  {num:16,nombre:"Max Arfsten",pos:"Defensa",club:"Borussia Dortmund"},
+  {num:8,nombre:"Tyler Adams",pos:"Mediocampista",club:"Bournemouth"},
+  {num:7,nombre:"Weston McKennie",pos:"Mediocampista",club:"Juventus"},
+  {num:10,nombre:"Christian Pulisic",pos:"Mediocampista",club:"AC Milán"},
+  {num:11,nombre:"Brenden Aaronson",pos:"Mediocampista",club:"Union Berlin"},
+  {num:17,nombre:"Gio Reyna",pos:"Mediocampista",club:"Nottingham Forest"},
+  {num:18,nombre:"Malik Tillman",pos:"Mediocampista",club:"PSV Eindhoven"},
+  {num:19,nombre:"Tim Weah",pos:"Mediocampista",club:"Juventus"},
+  {num:20,nombre:"Alejandro Zendejas",pos:"Mediocampista",club:"Club América"},
+  {num:9,nombre:"Folarin Balogun",pos:"Delantero",club:"Crystal Palace"},
+  {num:13,nombre:"Ricardo Pepi",pos:"Delantero",club:"PSV Eindhoven"},
+  {num:21,nombre:"Haji Wright",pos:"Delantero",club:"Coventry City"},
+]},
+{id:"par",name:"Paraguay",flag:"[[FLAG:py]]",grupo:"D",color:"#CC0000",coach:"Gustavo Alfaro",
+ plantel:[
+  {num:1,nombre:"Orlando Gill",pos:"Portero",club:"Olimpia"},
+  {num:12,nombre:"Roberto Fernández",pos:"Portero",club:"Rubio Ñu"},
+  {num:23,nombre:"Gastón Olveira",pos:"Portero",club:"Nacional"},
+  {num:2,nombre:"Juan Cáceres",pos:"Defensa",club:"Olimpia"},
+  {num:3,nombre:"Gustavo Velázquez",pos:"Defensa",club:"Olimpia"},
+  {num:4,nombre:"Gustavo Gómez",pos:"Defensa",club:"Palmeiras"},
+  {num:5,nombre:"Junior Alonso",pos:"Defensa",club:"Atletico Mineiro"},
+  {num:6,nombre:"José Canale",pos:"Defensa",club:"Guaraní"},
+  {num:13,nombre:"Omar Alderete",pos:"Defensa",club:"Getafe"},
+  {num:14,nombre:"Fabián Balbuena",pos:"Defensa",club:"Fenerbahce"},
+  {num:8,nombre:"Diego Gómez",pos:"Mediocampista",club:"Inter Miami"},
+  {num:16,nombre:"Damián Bobadilla",pos:"Mediocampista",club:"Torino"},
+  {num:17,nombre:"Braian Ojeda",pos:"Mediocampista",club:"Nottingham Forest"},
+  {num:18,nombre:"Andrés Cubas",pos:"Mediocampista",club:"Niza"},
+  {num:19,nombre:"Matías Galarza",pos:"Mediocampista",club:"Empoli"},
+  {num:20,nombre:"Alejandro Gamarra",pos:"Mediocampista",club:"Cerro Porteño"},
+  {num:7,nombre:"Ramón Sosa",pos:"Delantero",club:"Nottingham Forest"},
+  {num:9,nombre:"Antonio Sanabria",pos:"Delantero",club:"Torino"},
+  {num:10,nombre:"Miguel Almirón",pos:"Delantero",club:"Newcastle"},
+  {num:11,nombre:"Julio Enciso",pos:"Delantero",club:"Brighton"},
+  {num:15,nombre:"Gabriel Ávalos",pos:"Delantero",club:"Club Nacional"},
+  {num:21,nombre:"Isidro Pitta",pos:"Delantero",club:"Cruz Azul"},
+]},
+{id:"aus",name:"Australia",flag:"[[FLAG:au]]",grupo:"D",color:"#00008B",coach:"Tony Popovic",
+ plantel:[
+  {num:1,nombre:"Mathew Ryan",pos:"Portero",club:"Real Sociedad"},
+  {num:12,nombre:"Danny Vukovic",pos:"Portero",club:"Central Coast Mariners"},
+  {num:23,nombre:"Lawrence Thomas",pos:"Portero",club:"Melbourne Victory"},
+  {num:2,nombre:"Nathaniel Atkinson",pos:"Defensa",club:"St. Johnstone"},
+  {num:3,nombre:"Milos Degenek",pos:"Defensa",club:"Columbus Crew"},
+  {num:4,nombre:"Kye Rowles",pos:"Defensa",club:"Heart of Midlothian"},
+  {num:5,nombre:"Harry Souttar",pos:"Defensa",club:"Leicester City"},
+  {num:6,nombre:"Bailey Wright",pos:"Defensa",club:"Sunderland"},
+  {num:14,nombre:"Connor Metcalfe",pos:"Defensa",club:"Stoke City"},
+  {num:15,nombre:"Joel King",pos:"Defensa",club:"Ipswich Town"},
+  {num:8,nombre:"Riley McGree",pos:"Mediocampista",club:"Middlesbrough"},
+  {num:16,nombre:"Aziz Behich",pos:"Mediocampista",club:"Dundee United"},
+  {num:17,nombre:"Garang Kuol",pos:"Mediocampista",club:"Hearts"},
+  {num:18,nombre:"Cameron Devlin",pos:"Mediocampista",club:"Heart of Midlothian"},
+  {num:19,nombre:"Marco Tilio",pos:"Mediocampista",club:"Club Brugge"},
+  {num:10,nombre:"Ajdin Hrustic",pos:"Mediocampista",club:"Heracles"},
+  {num:7,nombre:"Mathew Leckie",pos:"Delantero",club:"Melbourne City"},
+  {num:9,nombre:"Mitch Duke",pos:"Delantero",club:"Fagiano Okayama"},
+  {num:11,nombre:"Jason Cummings",pos:"Delantero",club:"Central Coast Mariners"},
+  {num:20,nombre:"Awer Mabil",pos:"Delantero",club:"Castellón"},
+  {num:21,nombre:"Cristian Volpato",pos:"Delantero",club:"Sassuolo"},
+  {num:22,nombre:"Nestory Irankunda",pos:"Delantero",club:"Watford"},
+]},
+{id:"tur",name:"Turquía",flag:"[[FLAG:tr]]",grupo:"D",color:"#E30A17",coach:"Vincenzo Montella",
+ plantel:[
+  {num:1,nombre:"Altay Bayindir",pos:"Portero",club:"Manchester United"},
+  {num:12,nombre:"Ugurcan Cakir",pos:"Portero",club:"Trabzonspor"},
+  {num:23,nombre:"Mert Günok",pos:"Portero",club:"Besiktas"},
+  {num:2,nombre:"Zeki Celik",pos:"Defensa",club:"Roma"},
+  {num:3,nombre:"Ferdi Kadioglu",pos:"Defensa",club:"Brighton"},
+  {num:4,nombre:"Samet Akaydin",pos:"Defensa",club:"Fenerbahce"},
+  {num:5,nombre:"Merih Demiral",pos:"Defensa",club:"Al-Qadsiah"},
+  {num:6,nombre:"Abdülkerim Bardakcı",pos:"Defensa",club:"Galatasaray"},
+  {num:13,nombre:"Mert Muldur",pos:"Defensa",club:"Sassuolo"},
+  {num:14,nombre:"Kaan Ayhan",pos:"Defensa",club:"Galatasaray"},
+  {num:8,nombre:"Hakan Calhanoglu",pos:"Mediocampista",club:"Inter de Milán"},
+  {num:7,nombre:"Kenan Yildiz",pos:"Mediocampista",club:"Juventus"},
+  {num:16,nombre:"Arda Güler",pos:"Mediocampista",club:"Real Madrid"},
+  {num:17,nombre:"Orkun Kökcü",pos:"Mediocampista",club:"Benfica"},
+  {num:18,nombre:"Salih Özcan",pos:"Mediocampista",club:"Borussia Dortmund"},
+  {num:19,nombre:"Ismail Yüksek",pos:"Mediocampista",club:"Fenerbahce"},
+  {num:20,nombre:"Baris Yilmaz",pos:"Mediocampista",club:"Trabzonspor"},
+  {num:9,nombre:"Cenk Tosun",pos:"Delantero",club:"Besiktas"},
+  {num:10,nombre:"Burak Yilmaz",pos:"Delantero",club:"Trabzonspor"},
+  {num:11,nombre:"Yusuf Yazici",pos:"Delantero",club:"LOSC Lille"},
+  {num:15,nombre:"Efecan Karaca",pos:"Delantero",club:"Fenerbahce"},
+]},
+/* ── GRUPO E ── */
+{id:"ale",name:"Alemania",flag:"[[FLAG:de]]",grupo:"E",color:"#000000",coach:"Julian Nagelsmann",
+ plantel:[
+  {num:1,nombre:"Manuel Neuer",pos:"Portero",club:"Bayern Munich"},
+  {num:12,nombre:"Oliver Baumann",pos:"Portero",club:"Hoffenheim"},
+  {num:23,nombre:"Alexander Nübel",pos:"Portero",club:"VfB Stuttgart"},
+  {num:4,nombre:"Jonathan Tah",pos:"Defensa",club:"Bayer Leverkusen"},
+  {num:5,nombre:"Nico Schlotterbeck",pos:"Defensa",club:"Borussia Dortmund"},
+  {num:3,nombre:"David Raum",pos:"Defensa",club:"RB Leipzig"},
+  {num:2,nombre:"Nathanael Brown",pos:"Defensa",club:"Notts County"},
+  {num:16,nombre:"Waldemar Anton",pos:"Defensa",club:"Borussia Dortmund"},
+  {num:13,nombre:"Antonio Rüdiger",pos:"Defensa",club:"Real Madrid"},
+  {num:15,nombre:"Malick Thiaw",pos:"Defensa",club:"AC Milán"},
+  {num:6,nombre:"Joshua Kimmich",pos:"Mediocampista",club:"Bayern Munich"},
+  {num:8,nombre:"Leon Goretzka",pos:"Mediocampista",club:"Bayern Munich"},
+  {num:14,nombre:"Aleksandar Pavlovic",pos:"Mediocampista",club:"Bayern Munich"},
+  {num:17,nombre:"Angelo Stiller",pos:"Mediocampista",club:"VfB Stuttgart"},
+  {num:18,nombre:"Felix Nmecha",pos:"Mediocampista",club:"Borussia Dortmund"},
+  {num:19,nombre:"Nadiem Amiri",pos:"Mediocampista",club:"Mainz 05"},
+  {num:20,nombre:"Pascal Groß",pos:"Mediocampista",club:"Brighton"},
+  {num:7,nombre:"Kai Havertz",pos:"Delantero",club:"Arsenal"},
+  {num:10,nombre:"Florian Wirtz",pos:"Delantero",club:"Bayer Leverkusen"},
+  {num:11,nombre:"Jamal Musiala",pos:"Delantero",club:"Bayern Munich"},
+  {num:9,nombre:"Deniz Undav",pos:"Delantero",club:"VfB Stuttgart"},
+  {num:21,nombre:"Leroy Sané",pos:"Delantero",club:"Bayern Munich"},
+  {num:22,nombre:"Maximilian Beier",pos:"Delantero",club:"Borussia Dortmund"},
+  {num:24,nombre:"Nick Woltemade",pos:"Delantero",club:"VfB Stuttgart"},
+  {num:25,nombre:"Jamie Leweling",pos:"Delantero",club:"VfB Stuttgart"},
+]},
+{id:"cw",name:"Curazao",flag:"[[FLAG:cw]]",grupo:"E",color:"#002B7F",coach:"Dick Advocaat",
+ plantel:[
+  {num:1,nombre:"Eloy Room",pos:"Portero",club:"Colorado Rapids"},
+  {num:12,nombre:"Tyrick Bodak",pos:"Portero",club:"SBV Excelsior"},
+  {num:23,nombre:"Trevor Doornbusch",pos:"Portero",club:"FC Dordrecht"},
+  {num:2,nombre:"Joshua Brenet",pos:"Defensa",club:"FC Utrecht"},
+  {num:3,nombre:"Sherel Floranus",pos:"Defensa",club:"ADO Den Haag"},
+  {num:4,nombre:"Deveron Fonville",pos:"Defensa",club:"Omonia Nicosia"},
+  {num:5,nombre:"Jurien Gaari",pos:"Defensa",club:"Heerenveen"},
+  {num:6,nombre:"Armando Obispo",pos:"Defensa",club:"Panathinaikos"},
+  {num:14,nombre:"Riechedly Bazoer",pos:"Defensa",club:"Al-Hazem"},
+  {num:15,nombre:"Roshon van Eijma",pos:"Defensa",club:"FC Eindhoven"},
+  {num:16,nombre:"Shurandy Sambo",pos:"Defensa",club:"Clermont Foot"},
+  {num:7,nombre:"Leandro Bacuna",pos:"Mediocampista",club:"Cardiff City"},
+  {num:8,nombre:"Juninho Bacuna",pos:"Mediocampista",club:"Rangers FC"},
+  {num:17,nombre:"Livano Comenencia",pos:"Mediocampista",club:"Lommel SK"},
+  {num:18,nombre:"Kevin Felida",pos:"Mediocampista",club:"De Graafschap"},
+  {num:19,nombre:"Ar'jany Martha",pos:"Mediocampista",club:"Beerschot"},
+  {num:20,nombre:"Tyrese Noslin",pos:"Mediocampista",club:"Vitesse"},
+  {num:21,nombre:"Godfried Roemeratoe",pos:"Mediocampista",club:"Dundee United"},
+  {num:9,nombre:"Tahith Chong",pos:"Delantero",club:"Burnley"},
+  {num:10,nombre:"Jürgen Locadia",pos:"Delantero",club:"FC Emmen"},
+  {num:11,nombre:"Brandley Kuwas",pos:"Delantero",club:"Slavia Praga"},
+  {num:13,nombre:"Sontje Hansen",pos:"Delantero",club:"RKC Waalwijk"},
+  {num:22,nombre:"Gervane Kastaneer",pos:"Delantero",club:"Paderborn"},
+  {num:24,nombre:"Kenji Gorré",pos:"Delantero",club:"NEC Nijmegen"},
+  {num:25,nombre:"Jearl Margaritha",pos:"Delantero",club:"Go Ahead Eagles"},
+]},
+{id:"civ",name:"Costa de Marfil",flag:"[[FLAG:ci]]",grupo:"E",color:"#F77F00",coach:"Emerse Faé",
+ plantel:[
+  {num:1,nombre:"Yahia Fofana",pos:"Portero",club:"Çaykur Rizespor"},
+  {num:12,nombre:"Badra Sangaré",pos:"Portero",club:"Toulouse"},
+  {num:23,nombre:"Mamadou Koné",pos:"Portero",club:"Charleroi"},
+  {num:2,nombre:"Serge Aurier",pos:"Defensa",club:"Sin club"},
+  {num:3,nombre:"Ghislain Konan",pos:"Defensa",club:"Reims"},
+  {num:4,nombre:"Eric Bailly",pos:"Defensa",club:"Brest"},
+  {num:5,nombre:"Odilon Kossounou",pos:"Defensa",club:"Bayer Leverkusen"},
+  {num:6,nombre:"Jean-Philippe Gbamin",pos:"Defensa",club:"Hatayspor"},
+  {num:13,nombre:"Willy Boly",pos:"Defensa",club:"Nottingham Forest"},
+  {num:14,nombre:"Ousmane Diomandé",pos:"Defensa",club:"Sporting CP"},
+  {num:8,nombre:"Franck Kessié",pos:"Mediocampista",club:"Al-Ahli"},
+  {num:16,nombre:"Ibrahim Sangaré",pos:"Mediocampista",club:"Nottingham Forest"},
+  {num:17,nombre:"Seko Fofana",pos:"Mediocampista",club:"Al-Qadsiah"},
+  {num:18,nombre:"Youssouf Dao",pos:"Mediocampista",club:"Karlsruhe"},
+  {num:19,nombre:"Karim Konaté",pos:"Mediocampista",club:"Red Bull Salzburg"},
+  {num:7,nombre:"Nicolas Pépé",pos:"Delantero",club:"Sin club"},
+  {num:9,nombre:"Sebastián Haller",pos:"Delantero",club:"Borussia Dortmund"},
+  {num:10,nombre:"Wilfried Zaha",pos:"Delantero",club:"Galatasaray"},
+  {num:11,nombre:"Simon Adingra",pos:"Delantero",club:"Brighton"},
+  {num:15,nombre:"Maxime Gradel",pos:"Delantero",club:"Toulouse"},
+  {num:20,nombre:"Jonathan Bamba",pos:"Delantero",club:"LOSC Lille"},
+  {num:21,nombre:"Max-Alain Gradel",pos:"Delantero",club:"Toulouse"},
+]},
+{id:"ecu",name:"Ecuador",flag:"[[FLAG:ec]]",grupo:"E",color:"#FFD100",coach:"Sebastián Beccacece",
+ plantel:[
+  {num:1,nombre:"Hernán Galíndez",pos:"Portero",club:"Aucas"},
+  {num:12,nombre:"Gonzalo Valle",pos:"Portero",club:"Técnico Universitario"},
+  {num:23,nombre:"Moisés Ramírez",pos:"Portero",club:"Nacional"},
+  {num:3,nombre:"Piero Hincapié",pos:"Defensa",club:"Bayer Leverkusen"},
+  {num:4,nombre:"Willian Pacho",pos:"Defensa",club:"PSG"},
+  {num:5,nombre:"Pervis Estupiñán",pos:"Defensa",club:"Brighton"},
+  {num:2,nombre:"Ángelo Preciado",pos:"Defensa",club:"Genk"},
+  {num:14,nombre:"Joel Ordóñez",pos:"Defensa",club:"Bournemouth"},
+  {num:15,nombre:"Félix Torres",pos:"Defensa",club:"Santos Laguna"},
+  {num:6,nombre:"Jackson Porozo",pos:"Defensa",club:"Troyes"},
+  {num:22,nombre:"Yaimar Medina",pos:"Defensa",club:"Twente"},
+  {num:8,nombre:"Moisés Caicedo",pos:"Mediocampista",club:"Chelsea"},
+  {num:16,nombre:"Alan Franco",pos:"Mediocampista",club:"Talleres"},
+  {num:17,nombre:"Gonzalo Plata",pos:"Mediocampista",club:"Valladolid"},
+  {num:18,nombre:"Kendry Páez",pos:"Mediocampista",club:"Chelsea"},
+  {num:19,nombre:"Pedro Vite",pos:"Mediocampista",club:"El Nacional"},
+  {num:20,nombre:"Jordy Alcívar",pos:"Mediocampista",club:"Deportivo Alavés"},
+  {num:21,nombre:"Denil Castillo",pos:"Mediocampista",club:"Panathinaikos"},
+  {num:7,nombre:"Enner Valencia",pos:"Delantero",club:"Fenerbahce"},
+  {num:9,nombre:"Kevin Rodríguez",pos:"Delantero",club:"Ipswich Town"},
+  {num:10,nombre:"Jordy Caicedo",pos:"Delantero",club:"Al-Qadsiah"},
+  {num:11,nombre:"Anthony Valencia",pos:"Delantero",club:"Independiente del Valle"},
+]},
+/* ── GRUPO F ── */
+{id:"ned",name:"Países Bajos",flag:"[[FLAG:nl]]",grupo:"F",color:"#FF6600",coach:"Ronald Koeman",
+ plantel:[
+  {num:1,nombre:"Bart Verbruggen",pos:"Portero",club:"Brighton"},
+  {num:12,nombre:"Mark Flekken",pos:"Portero",club:"Brentford"},
+  {num:23,nombre:"Robin Roefs",pos:"Portero",club:"NEC Nijmegen"},
+  {num:5,nombre:"Virgil van Dijk",pos:"Defensa",club:"Liverpool"},
+  {num:3,nombre:"Nathan Aké",pos:"Defensa",club:"Manchester City"},
+  {num:22,nombre:"Denzel Dumfries",pos:"Defensa",club:"Inter de Milán"},
+  {num:2,nombre:"Jorrel Hato",pos:"Defensa",club:"Ajax"},
+  {num:4,nombre:"Jurriën Timber",pos:"Defensa",club:"Arsenal"},
+  {num:6,nombre:"Jan Paul van Hecke",pos:"Defensa",club:"Brighton"},
+  {num:17,nombre:"Micky van de Ven",pos:"Defensa",club:"Tottenham"},
+  {num:8,nombre:"Frenkie de Jong",pos:"Mediocampista",club:"Barcelona"},
+  {num:15,nombre:"Marten de Roon",pos:"Mediocampista",club:"Atalanta"},
+  {num:14,nombre:"Ryan Gravenberch",pos:"Mediocampista",club:"Liverpool"},
+  {num:18,nombre:"Teun Koopmeiners",pos:"Mediocampista",club:"Juventus"},
+  {num:16,nombre:"Tijjani Reijnders",pos:"Mediocampista",club:"AC Milán"},
+  {num:19,nombre:"Guus Til",pos:"Mediocampista",club:"Feyenoord"},
+  {num:20,nombre:"Quinten Timber",pos:"Mediocampista",club:"Feyenoord"},
+  {num:21,nombre:"Mats Wieffer",pos:"Mediocampista",club:"Brighton"},
+  {num:7,nombre:"Cody Gakpo",pos:"Delantero",club:"Liverpool"},
+  {num:9,nombre:"Wout Weghorst",pos:"Delantero",club:"Hoffenheim"},
+  {num:10,nombre:"Memphis Depay",pos:"Delantero",club:"Atlético de Madrid"},
+  {num:11,nombre:"Brian Brobbey",pos:"Delantero",club:"Ajax"},
+  {num:13,nombre:"Justin Kluivert",pos:"Delantero",club:"Bournemouth"},
+  {num:24,nombre:"Noa Lang",pos:"Delantero",club:"PSV Eindhoven"},
+  {num:25,nombre:"Donyell Malen",pos:"Delantero",club:"Aston Villa"},
+  {num:26,nombre:"Crysencio Summerville",pos:"Delantero",club:"Leeds United"},
+]},
+{id:"jpn",name:"Japón",flag:"[[FLAG:jp]]",grupo:"F",color:"#BC002D",coach:"Hajime Moriyasu",
+ plantel:[
+  {num:1,nombre:"Shuichi Gonda",pos:"Portero",club:"Shimizu S-Pulse"},
+  {num:12,nombre:"Daniel Schmidt",pos:"Portero",club:"St. Truiden"},
+  {num:23,nombre:"Zion Suzuki",pos:"Portero",club:"Anderlecht"},
+  {num:2,nombre:"Hiroki Sakai",pos:"Defensa",club:"Urawa Reds"},
+  {num:3,nombre:"Ko Itakura",pos:"Defensa",club:"Borussia M'gladbach"},
+  {num:4,nombre:"Shogo Taniguchi",pos:"Defensa",club:"Yokohama F Marinos"},
+  {num:5,nombre:"Yuta Nakayama",pos:"Defensa",club:"Huddersfield Town"},
+  {num:14,nombre:"Miki Yamane",pos:"Defensa",club:"Kawasaki Frontale"},
+  {num:15,nombre:"Takehiro Tomiyasu",pos:"Defensa",club:"Arsenal"},
+  {num:22,nombre:"Ryusei Sako",pos:"Defensa",club:"Reims"},
+  {num:6,nombre:"Wataru Endo",pos:"Mediocampista",club:"Liverpool"},
+  {num:7,nombre:"Junya Ito",pos:"Mediocampista",club:"Stade de Reims"},
+  {num:8,nombre:"Hidemasa Morita",pos:"Mediocampista",club:"Sporting CP"},
+  {num:16,nombre:"Yuki Soma",pos:"Mediocampista",club:"Nagoya Grampus"},
+  {num:17,nombre:"Kaoru Mitoma",pos:"Mediocampista",club:"Brighton"},
+  {num:18,nombre:"Daichi Kamada",pos:"Mediocampista",club:"Crystal Palace"},
+  {num:19,nombre:"Ritsu Doan",pos:"Mediocampista",club:"SC Freiburg"},
+  {num:10,nombre:"Takumi Minamino",pos:"Delantero",club:"AS Monaco"},
+  {num:9,nombre:"Ayase Ueda",pos:"Delantero",club:"Feyenoord"},
+  {num:11,nombre:"Koki Ogawa",pos:"Delantero",club:"VfB Stuttgart"},
+  {num:20,nombre:"Keito Nakamura",pos:"Delantero",club:"Reims"},
+  {num:21,nombre:"Soma Naito",pos:"Delantero",club:"Kashiwa Reysol"},
+]},
+{id:"swe",name:"Suecia",flag:"[[FLAG:se]]",grupo:"F",color:"#006AA7",coach:"Graham Potter",
+ plantel:[
+  {num:1,nombre:"Viktor Johansson",pos:"Portero",club:"Stoke City"},
+  {num:12,nombre:"Kristoffer Nordfeldt",pos:"Portero",club:"AIK"},
+  {num:23,nombre:"Jacob Widell Zetterström",pos:"Portero",club:"Derby County"},
+  {num:2,nombre:"Hjalmar Ekdal",pos:"Defensa",club:"Burnley"},
+  {num:3,nombre:"Gabriel Gudmundsson",pos:"Defensa",club:"LOSC Lille"},
+  {num:4,nombre:"Isak Hien",pos:"Defensa",club:"Atalanta"},
+  {num:5,nombre:"Gustaf Lagerbielke",pos:"Defensa",club:"Celtic"},
+  {num:6,nombre:"Victor Lindelöf",pos:"Defensa",club:"Manchester United"},
+  {num:13,nombre:"Carl Starfelt",pos:"Defensa",club:"Celta de Vigo"},
+  {num:14,nombre:"Daniel Svensson",pos:"Defensa",club:"Borussia Dortmund"},
+  {num:8,nombre:"Lucas Bergvall",pos:"Mediocampista",club:"Tottenham"},
+  {num:16,nombre:"Yasin Ayari",pos:"Mediocampista",club:"Brighton"},
+  {num:17,nombre:"Jesper Karlström",pos:"Mediocampista",club:"Udinese"},
+  {num:18,nombre:"Mattias Svanberg",pos:"Mediocampista",club:"Wolfsburg"},
+  {num:19,nombre:"Ken Sema",pos:"Mediocampista",club:"Pafos"},
+  {num:20,nombre:"Herman Johansson",pos:"Mediocampista",club:"FC Dallas"},
+  {num:9,nombre:"Alexander Isak",pos:"Delantero",club:"Newcastle United"},
+  {num:10,nombre:"Viktor Gyökeres",pos:"Delantero",club:"Arsenal"},
+  {num:11,nombre:"Anthony Elanga",pos:"Delantero",club:"Newcastle United"},
+  {num:7,nombre:"Alexander Bernhardsson",pos:"Delantero",club:"Holstein Kiel"},
+  {num:15,nombre:"Gustaf Nilsson",pos:"Delantero",club:"Club Brugge"},
+  {num:21,nombre:"Benjamin Nygren",pos:"Delantero",club:"Celtic"},
+]},
+{id:"tun",name:"Túnez",flag:"[[FLAG:tn]]",grupo:"F",color:"#E70013",coach:"Jalel Kadri",
+ plantel:[
+  {num:1,nombre:"Aymen Dahmen",pos:"Portero",club:"Montpellier"},
+  {num:12,nombre:"Bechir Ben Said",pos:"Portero",club:"US Monastir"},
+  {num:23,nombre:"Mouez Hassen",pos:"Portero",club:"Nice"},
+  {num:4,nombre:"Yassine Meriah",pos:"Defensa",club:"Esperance Tunis"},
+  {num:5,nombre:"Dylan Bronn",pos:"Defensa",club:"Salernitana"},
+  {num:3,nombre:"Nader Ghandri",pos:"Defensa",club:"Habib Beji Sport"},
+  {num:2,nombre:"Mohamed Drager",pos:"Defensa",club:"FC Porto"},
+  {num:6,nombre:"Montassar Talbi",pos:"Defensa",club:"Lorient"},
+  {num:13,nombre:"Ali Abdi",pos:"Defensa",club:"Levante"},
+  {num:14,nombre:"Wajdi Kechrida",pos:"Defensa",club:"Panathinaikos"},
+  {num:8,nombre:"Aissa Laidouni",pos:"Mediocampista",club:"Ferencváros"},
+  {num:16,nombre:"Ghaylen Chaalali",pos:"Mediocampista",club:"Esperance Tunis"},
+  {num:17,nombre:"Hannibal Mejbri",pos:"Mediocampista",club:"Sevilla"},
+  {num:18,nombre:"Ellyes Skhiri",pos:"Mediocampista",club:"Eintracht Frankfurt"},
+  {num:19,nombre:"Mohamed Ali Ben Romdhane",pos:"Mediocampista",club:"Nantes"},
+  {num:7,nombre:"Youssef Msakni",pos:"Delantero",club:"Esperance Tunis"},
+  {num:9,nombre:"Wahbi Khazri",pos:"Delantero",club:"Montpellier"},
+  {num:10,nombre:"Seifeddine Jaziri",pos:"Delantero",club:"Esperance Tunis"},
+  {num:11,nombre:"Taha Yassine Khenissi",pos:"Delantero",club:"Esperance Tunis"},
+  {num:15,nombre:"Naim Sliti",pos:"Delantero",club:"AS Nancy"},
+  {num:20,nombre:"Sabeur Sfaxi",pos:"Delantero",club:"Esperance Tunis"},
+  {num:21,nombre:"Issam Jebali",pos:"Delantero",club:"Sint-Truiden"},
+]},
+/* ── GRUPO G ── */
+{id:"bel",name:"Bélgica",flag:"[[FLAG:be]]",grupo:"G",color:"#000000",coach:"Rudi García",
+ plantel:[
+  {num:1,nombre:"Thibaut Courtois",pos:"Portero",club:"Real Madrid"},
+  {num:12,nombre:"Senne Lammens",pos:"Portero",club:"Royal Antwerp"},
+  {num:23,nombre:"Mike Penders",pos:"Portero",club:"Genk"},
+  {num:2,nombre:"Timothy Castagne",pos:"Defensa",club:"Fulham"},
+  {num:3,nombre:"Zeno Debast",pos:"Defensa",club:"Sporting CP"},
+  {num:4,nombre:"Maxim De Cuyper",pos:"Defensa",club:"Club Brugge"},
+  {num:5,nombre:"Koni De Winter",pos:"Defensa",club:"Udinese"},
+  {num:6,nombre:"Brandon Mechele",pos:"Defensa",club:"Club Brugge"},
+  {num:13,nombre:"Thomas Meunier",pos:"Defensa",club:"Trabzonspor"},
+  {num:14,nombre:"Nathan Ngoy",pos:"Defensa",club:"Anderlecht"},
+  {num:15,nombre:"Arthur Theate",pos:"Defensa",club:"Stade Rennais"},
+  {num:8,nombre:"Kevin De Bruyne",pos:"Mediocampista",club:"Manchester City"},
+  {num:16,nombre:"Amadou Onana",pos:"Mediocampista",club:"Aston Villa"},
+  {num:17,nombre:"Nicolas Raskin",pos:"Mediocampista",club:"Rangers FC"},
+  {num:18,nombre:"Youri Tielemans",pos:"Mediocampista",club:"Aston Villa"},
+  {num:19,nombre:"Hans Vanaken",pos:"Mediocampista",club:"Club Brugge"},
+  {num:20,nombre:"Axel Witsel",pos:"Mediocampista",club:"Atlético de Madrid"},
+  {num:7,nombre:"Jérémy Doku",pos:"Delantero",club:"Manchester City"},
+  {num:9,nombre:"Romelu Lukaku",pos:"Delantero",club:"Roma"},
+  {num:10,nombre:"Charles De Ketelaere",pos:"Delantero",club:"Atalanta"},
+  {num:11,nombre:"Leandro Trossard",pos:"Delantero",club:"Arsenal"},
+  {num:21,nombre:"Alexis Saelemaekers",pos:"Delantero",club:"Bologna"},
+  {num:22,nombre:"Dodi Lukebakio",pos:"Delantero",club:"Sevilla"},
+  {num:24,nombre:"Diego Moreira",pos:"Delantero",club:"Paris Saint-Germain"},
+  {num:25,nombre:"Matías Fernández-Pardo",pos:"Delantero",club:"LOSC Lille"},
+]},
+{id:"egy",name:"Egipto",flag:"[[FLAG:eg]]",grupo:"G",color:"#CE1126",coach:"Hossam Hassan",
+ plantel:[
+  {num:1,nombre:"Mohamed El Shenawy",pos:"Portero",club:"Al-Ahly"},
+  {num:12,nombre:"Mostafa Shobeir",pos:"Portero",club:"Zamalek"},
+  {num:23,nombre:"Adham El-Nenny",pos:"Portero",club:"El Entag El Harby"},
+  {num:2,nombre:"Ahmed Hegazy",pos:"Defensa",club:"Al-Ittihad"},
+  {num:3,nombre:"Ahmed Fatouh",pos:"Defensa",club:"Al-Ahly"},
+  {num:4,nombre:"Akram Tawfik",pos:"Defensa",club:"Al-Ahly"},
+  {num:5,nombre:"Omar Kamal",pos:"Defensa",club:"Pyramids"},
+  {num:6,nombre:"Mohamed Abdel Moneim",pos:"Defensa",club:"Al-Ahly"},
+  {num:13,nombre:"Mahmoud Alaa",pos:"Defensa",club:"Zamalek"},
+  {num:14,nombre:"Zizo",pos:"Defensa",club:"Zamalek"},
+  {num:8,nombre:"Ahmed El Shenawy",pos:"Mediocampista",club:"Al-Ahly"},
+  {num:16,nombre:"Amr El Sulaya",pos:"Mediocampista",club:"Pyramids"},
+  {num:17,nombre:"Hamdi Fathi",pos:"Mediocampista",club:"CSKA Moscú"},
+  {num:18,nombre:"Nasser Maher",pos:"Mediocampista",club:"Al-Ahly"},
+  {num:19,nombre:"Taher Mohamed Taher",pos:"Mediocampista",club:"Zamalek"},
+  {num:20,nombre:"Ibrahim Adel",pos:"Mediocampista",club:"Brest"},
+  {num:7,nombre:"Mohamed Salah",pos:"Delantero",club:"Liverpool"},
+  {num:9,nombre:"Mostafa Mohamed",pos:"Delantero",club:"Galatasaray"},
+  {num:10,nombre:"Omar Marmoush",pos:"Delantero",club:"Manchester City"},
+  {num:11,nombre:"Emam Ashour",pos:"Delantero",club:"Galatasaray"},
+  {num:15,nombre:"Ahmed Sayed Zizo",pos:"Delantero",club:"Zamalek"},
+  {num:21,nombre:"Mahmoud Hassan (Trezeguet)",pos:"Delantero",club:"Al-Ahly"},
+]},
+{id:"ira",name:"Irán",flag:"[[FLAG:ir]]",grupo:"G",color:"#239F40",coach:"Carlos Queiroz",
+ plantel:[
+  {num:1,nombre:"Alireza Beiranvand",pos:"Portero",club:"Antwerp"},
+  {num:12,nombre:"Payam Niazmand",pos:"Portero",club:"Persepolis"},
+  {num:23,nombre:"Hossein Hosseini",pos:"Portero",club:"Foolad"},
+  {num:2,nombre:"Ramin Rezaeian",pos:"Defensa",club:"Cercle Brugge"},
+  {num:3,nombre:"Milad Mohammadi",pos:"Defensa",club:"Östersunds FK"},
+  {num:4,nombre:"Shoja Khalilzadeh",pos:"Defensa",club:"Fulham"},
+  {num:5,nombre:"Majid Hosseini",pos:"Defensa",club:"Kasımpaşa"},
+  {num:6,nombre:"Mohammad Reza Khanzadeh",pos:"Defensa",club:"Al-Fateh"},
+  {num:14,nombre:"Sadegh Moharrami",pos:"Defensa",club:"Dinamo Zagreb"},
+  {num:15,nombre:"Hossein Kanaanizadegan",pos:"Defensa",club:"Sepahan"},
+  {num:8,nombre:"Ahmad Noorollahi",pos:"Mediocampista",club:"Persepolis"},
+  {num:16,nombre:"Saeid Ezatolahi",pos:"Mediocampista",club:"Real Valladolid"},
+  {num:17,nombre:"Vahid Amiri",pos:"Mediocampista",club:"Persepolis"},
+  {num:18,nombre:"Ali Gholizadeh",pos:"Mediocampista",club:"Charlton Athletic"},
+  {num:19,nombre:"Karim Ansarifard",pos:"Mediocampista",club:"Nottingham Forest"},
+  {num:7,nombre:"Alireza Jahanbakhsh",pos:"Delantero",club:"Feyenoord"},
+  {num:9,nombre:"Mehdi Taremi",pos:"Delantero",club:"Inter de Milán"},
+  {num:10,nombre:"Sardar Azmoun",pos:"Delantero",club:"AS Roma"},
+  {num:11,nombre:"Saman Ghoddos",pos:"Delantero",club:"Brentford"},
+  {num:20,nombre:"Allahyar Sayyadmanesh",pos:"Delantero",club:"Fenerbahce"},
+  {num:21,nombre:"Mehdi Ghayedi",pos:"Delantero",club:"Hamburgo SV"},
+]},
+{id:"nzl",name:"Nueva Zelanda",flag:"[[FLAG:nz]]",grupo:"G",color:"#00247D",coach:"Darren Bazeley",
+ plantel:[
+  {num:1,nombre:"Oliver Sail",pos:"Portero",club:"Silkeborg IF"},
+  {num:12,nombre:"James Penney",pos:"Portero",club:"Wellington Phoenix"},
+  {num:23,nombre:"Max Crocombe",pos:"Portero",club:"Kristiansund BK"},
+  {num:2,nombre:"Tim Payne",pos:"Defensa",club:"Club de Foot Montréal"},
+  {num:3,nombre:"Liberato Cacace",pos:"Defensa",club:"Wrexham"},
+  {num:4,nombre:"Tyler Bindon",pos:"Defensa",club:"Sheffield United"},
+  {num:5,nombre:"Michael Boxall",pos:"Defensa",club:"Minnesota United"},
+  {num:6,nombre:"Nando Pijnaker",pos:"Defensa",club:"Auckland FC"},
+  {num:14,nombre:"Francis De Vries",pos:"Defensa",club:"Auckland FC"},
+  {num:15,nombre:"Finn Surman",pos:"Defensa",club:"Portland Timbers"},
+  {num:8,nombre:"Marko Stamenic",pos:"Mediocampista",club:"Swansea City"},
+  {num:16,nombre:"Matthew Garbett",pos:"Mediocampista",club:"Peterborough United"},
+  {num:17,nombre:"Joel Bell",pos:"Mediocampista",club:"Viking Stavanger"},
+  {num:18,nombre:"Lachlan Bayliss",pos:"Mediocampista",club:"Newcastle Jets"},
+  {num:19,nombre:"Ben Old",pos:"Mediocampista",club:"AS Saint-Étienne"},
+  {num:20,nombre:"Callum McCowatt",pos:"Mediocampista",club:"Silkeborg IF"},
+  {num:7,nombre:"Chris Wood",pos:"Delantero",club:"Nottingham Forest"},
+  {num:9,nombre:"Kosta Barbarouses",pos:"Delantero",club:"Western Sydney Wanderers"},
+  {num:10,nombre:"Ben Waine",pos:"Delantero",club:"Port Vale"},
+  {num:11,nombre:"Jesse Randall",pos:"Delantero",club:"Auckland FC"},
+  {num:21,nombre:"Sarpreet Singh",pos:"Delantero",club:"Wellington Phoenix"},
+]},
+/* ── GRUPO H ── */
+{id:"esp",name:"España",flag:"[[FLAG:es]]",grupo:"H",color:"#AA151B",coach:"Luis de la Fuente",
+ plantel:[
+  {num:1,nombre:"Unai Simón",pos:"Portero",club:"Athletic Club"},
+  {num:13,nombre:"David Raya",pos:"Portero",club:"Arsenal"},
+  {num:23,nombre:"Joan García",pos:"Portero",club:"Espanyol"},
+  {num:2,nombre:"Pedro Porro",pos:"Defensa",club:"Tottenham"},
+  {num:3,nombre:"Alejandro Grimaldo",pos:"Defensa",club:"Bayer Leverkusen"},
+  {num:4,nombre:"Aymeric Laporte",pos:"Defensa",club:"Al-Nassr"},
+  {num:5,nombre:"Marc Cubarsí",pos:"Defensa",club:"Barcelona"},
+  {num:6,nombre:"Marcos Llorente",pos:"Defensa",club:"Atlético de Madrid"},
+  {num:14,nombre:"Eric García",pos:"Defensa",club:"Girona"},
+  {num:15,nombre:"Marc Pubill",pos:"Defensa",club:"Almería"},
+  {num:21,nombre:"Marc Cucurella",pos:"Defensa",club:"Chelsea"},
+  {num:8,nombre:"Pedri",pos:"Mediocampista",club:"Barcelona"},
+  {num:7,nombre:"Fabián Ruiz",pos:"Mediocampista",club:"PSG"},
+  {num:16,nombre:"Rodrigo Hernández (Rodri)",pos:"Mediocampista",club:"Manchester City"},
+  {num:6,nombre:"Martín Zubimendi",pos:"Mediocampista",club:"Real Sociedad"},
+  {num:9,nombre:"Gavi",pos:"Mediocampista",club:"Barcelona"},
+  {num:18,nombre:"Álex Baena",pos:"Mediocampista",club:"Villarreal"},
+  {num:22,nombre:"Mikel Merino",pos:"Mediocampista",club:"Arsenal"},
+  {num:11,nombre:"Mikel Oyarzabal",pos:"Delantero",club:"Real Sociedad"},
+  {num:10,nombre:"Dani Olmo",pos:"Delantero",club:"Barcelona"},
+  {num:17,nombre:"Nico Williams",pos:"Delantero",club:"Athletic Club"},
+  {num:12,nombre:"Yeremy Pino",pos:"Delantero",club:"Villarreal"},
+  {num:19,nombre:"Lamine Yamal",pos:"Delantero",club:"Barcelona"},
+  {num:20,nombre:"Ferran Torres",pos:"Delantero",club:"Barcelona"},
+  {num:24,nombre:"Borja Iglesias",pos:"Delantero",club:"Bayer Leverkusen"},
+]},
+{id:"cpv",name:"Cabo Verde",flag:"[[FLAG:cv]]",grupo:"H",color:"#009A44",coach:"Bubista",
+ plantel:[
+  {num:1,nombre:"Vozinha",pos:"Portero",club:"Celta de Vigo"},
+  {num:12,nombre:"Marcelo Boavida",pos:"Portero",club:"Praia FC"},
+  {num:23,nombre:"Josimar Dias",pos:"Portero",club:"Académico do Porto"},
+  {num:2,nombre:"Kenny Rocha",pos:"Defensa",club:"Maccabi Petah Tikva"},
+  {num:3,nombre:"Stopira",pos:"Defensa",club:"Ferencváros"},
+  {num:4,nombre:"Jeffry Fortes",pos:"Defensa",club:"Vitória de Setúbal"},
+  {num:5,nombre:"Diney",pos:"Defensa",club:"CS Marítimo"},
+  {num:6,nombre:"Amilton Tenreiro",pos:"Defensa",club:"Belenenses SAD"},
+  {num:14,nombre:"Roberto Lopes",pos:"Defensa",club:"Shamrock Rovers"},
+  {num:7,nombre:"Garry Rodrigues",pos:"Mediocampista",club:"Galatasaray"},
+  {num:8,nombre:"Nuno Tavares",pos:"Mediocampista",club:"Lazio"},
+  {num:16,nombre:"Ryan Mendes",pos:"Mediocampista",club:"Deportivo Alcoron"},
+  {num:17,nombre:"Júlio Tavares",pos:"Mediocampista",club:"Dijon"},
+  {num:18,nombre:"Sandro Mendes",pos:"Mediocampista",club:"Gil Vicente"},
+  {num:9,nombre:"Lisandro Semedo",pos:"Delantero",club:"Anderlecht"},
+  {num:10,nombre:"Jovane Cabral",pos:"Delantero",club:"Lazio"},
+  {num:11,nombre:"Vagner Dias",pos:"Delantero",club:"Maccabi Tel Aviv"},
+  {num:15,nombre:"Djaniny",pos:"Delantero",club:"Al-Nassr"},
+  {num:19,nombre:"Gilson Benchimol",pos:"Delantero",club:"FC Famalicão"},
+  {num:20,nombre:"Deroy Duarte",pos:"Delantero",club:"Fortuna Sittard"},
+]},
+{id:"sau",name:"Arabia Saudita",flag:"[[FLAG:sa]]",grupo:"H",color:"#006C35",coach:"Roberto Mancini",
+ plantel:[
+  {num:1,nombre:"Mohammed Al-Owais",pos:"Portero",club:"Al-Hilal"},
+  {num:12,nombre:"Nawaf Al-Aqidi",pos:"Portero",club:"Al-Ahly"},
+  {num:23,nombre:"Yasser Al-Mosailem",pos:"Portero",club:"Al-Ittihad"},
+  {num:2,nombre:"Sultan Al-Ghannam",pos:"Defensa",club:"Al-Ittihad"},
+  {num:3,nombre:"Ali Al-Bulaihi",pos:"Defensa",club:"Al-Hilal"},
+  {num:4,nombre:"Abdulelah Al-Amri",pos:"Defensa",club:"Al-Hilal"},
+  {num:5,nombre:"Hassan Al-Tambakti",pos:"Defensa",club:"Al-Shabab"},
+  {num:6,nombre:"Mohammed Al-Breik",pos:"Defensa",club:"Al-Hilal"},
+  {num:13,nombre:"Abdulellah Al-Malki",pos:"Defensa",club:"Al-Hilal"},
+  {num:8,nombre:"Mohammed Al-Qasim",pos:"Mediocampista",club:"Al-Hilal"},
+  {num:16,nombre:"Riyadh Sharahili",pos:"Mediocampista",club:"Al-Ittihad"},
+  {num:17,nombre:"Salman Al-Faraj",pos:"Mediocampista",club:"Al-Hilal"},
+  {num:18,nombre:"Sami Al-Najei",pos:"Mediocampista",club:"Al-Ahly"},
+  {num:19,nombre:"Nasser Al-Dawsari",pos:"Mediocampista",club:"Al-Hilal"},
+  {num:20,nombre:"Ali Al-Hassan",pos:"Mediocampista",club:"Al-Hilal"},
+  {num:7,nombre:"Firas Al-Buraikan",pos:"Delantero",club:"Al-Fateh"},
+  {num:9,nombre:"Haitham Asiri",pos:"Delantero",club:"Ferencváros"},
+  {num:10,nombre:"Saleh Al-Shehri",pos:"Delantero",club:"Al-Hilal"},
+  {num:11,nombre:"Abdullah Al-Hamdan",pos:"Delantero",club:"Al-Qadsiah"},
+  {num:15,nombre:"Salem Al-Dawsari",pos:"Delantero",club:"Al-Hilal"},
+  {num:21,nombre:"Mukhtar Ali",pos:"Delantero",club:"Al-Ahly"},
+]},
+{id:"uru",name:"Uruguay",flag:"[[FLAG:uy]]",grupo:"H",color:"#75AADB",coach:"Marcelo Bielsa",
+ plantel:[
+  {num:1,nombre:"Sergio Rochet",pos:"Portero",club:"Nacional"},
+  {num:12,nombre:"Fernando Muslera",pos:"Portero",club:"Galatasaray"},
+  {num:23,nombre:"Santiago Mele",pos:"Portero",club:"Junior"},
+  {num:2,nombre:"Guillermo Varela",pos:"Defensa",club:"Boca Juniors"},
+  {num:3,nombre:"Mathías Olivera",pos:"Defensa",club:"Nápoles"},
+  {num:4,nombre:"Ronald Araújo",pos:"Defensa",club:"Barcelona"},
+  {num:5,nombre:"José María Giménez",pos:"Defensa",club:"Atlético de Madrid"},
+  {num:6,nombre:"Santiago Bueno",pos:"Defensa",club:"Wolverhampton"},
+  {num:13,nombre:"Sebastián Cáceres",pos:"Defensa",club:"Club América"},
+  {num:14,nombre:"Joaquín Piquerez",pos:"Defensa",club:"Palmeiras"},
+  {num:15,nombre:"Matías Viña",pos:"Defensa",club:"AS Roma"},
+  {num:8,nombre:"Rodrigo Bentancur",pos:"Mediocampista",club:"Tottenham"},
+  {num:7,nombre:"Federico Valverde",pos:"Mediocampista",club:"Real Madrid"},
+  {num:16,nombre:"Manuel Ugarte",pos:"Mediocampista",club:"Manchester United"},
+  {num:17,nombre:"Giorgan de Arrascaeta",pos:"Mediocampista",club:"Flamengo"},
+  {num:18,nombre:"Nicolás de la Cruz",pos:"Mediocampista",club:"Flamengo"},
+  {num:19,nombre:"Facundo Pellistri",pos:"Mediocampista",club:"Manchester United"},
+  {num:20,nombre:"Maximiliano Araújo",pos:"Mediocampista",club:"Sporting CP"},
+  {num:21,nombre:"Agustín Canobbio",pos:"Mediocampista",club:"Boca Juniors"},
+  {num:9,nombre:"Darwin Núñez",pos:"Delantero",club:"Liverpool"},
+  {num:10,nombre:"Federico Viñas",pos:"Delantero",club:"Club América"},
+  {num:11,nombre:"Rodrigo Aguirre",pos:"Delantero",club:"Monterrey"},
+]},
+/* ── GRUPO I ── */
+{id:"fra",name:"Francia",flag:"[[FLAG:fr]]",grupo:"I",color:"#0055A4",coach:"Didier Deschamps",
+ plantel:[
+  {num:1,nombre:"Mike Maignan",pos:"Portero",club:"AC Milán"},
+  {num:16,nombre:"Robin Risser",pos:"Portero",club:"Lens"},
+  {num:23,nombre:"Brice Samba",pos:"Portero",club:"Lens"},
+  {num:2,nombre:"Malo Gusto",pos:"Defensa",club:"Chelsea"},
+  {num:3,nombre:"Theo Hernández",pos:"Defensa",club:"AC Milán"},
+  {num:4,nombre:"Dayot Upamecano",pos:"Defensa",club:"Bayern Munich"},
+  {num:5,nombre:"Lucas Hernández",pos:"Defensa",club:"PSG"},
+  {num:6,nombre:"William Saliba",pos:"Defensa",club:"Arsenal"},
+  {num:13,nombre:"Ibrahima Konaté",pos:"Defensa",club:"Liverpool"},
+  {num:14,nombre:"Jules Koundé",pos:"Defensa",club:"Barcelona"},
+  {num:15,nombre:"Maxence Lacroix",pos:"Defensa",club:"Wolfsburg"},
+  {num:21,nombre:"Lucas Digne",pos:"Defensa",club:"Aston Villa"},
+  {num:8,nombre:"Aurélien Tchouaméni",pos:"Mediocampista",club:"Real Madrid"},
+  {num:18,nombre:"N'Golo Kanté",pos:"Mediocampista",club:"Al-Ittihad"},
+  {num:19,nombre:"Manu Koné",pos:"Mediocampista",club:"Roma"},
+  {num:25,nombre:"Warren Zaïre-Emery",pos:"Mediocampista",club:"PSG"},
+  {num:24,nombre:"Adrien Rabiot",pos:"Mediocampista",club:"Juventus"},
+  {num:7,nombre:"Antoine Griezmann",pos:"Delantero",club:"Atlético de Madrid"},
+  {num:10,nombre:"Kylian Mbappé",pos:"Delantero",club:"Real Madrid"},
+  {num:11,nombre:"Ousmane Dembélé",pos:"Delantero",club:"PSG"},
+  {num:9,nombre:"Marcus Thuram",pos:"Delantero",club:"Inter de Milán"},
+  {num:17,nombre:"Bradley Barcola",pos:"Delantero",club:"PSG"},
+  {num:20,nombre:"Désiré Doué",pos:"Delantero",club:"PSG"},
+  {num:22,nombre:"Michael Olise",pos:"Delantero",club:"Bayern Munich"},
+  {num:26,nombre:"Maghnes Akliouche",pos:"Delantero",club:"AS Monaco"},
+]},
+{id:"sen",name:"Senegal",flag:"[[FLAG:sn]]",grupo:"I",color:"#00853F",coach:"Aliou Cissé",
+ plantel:[
+  {num:1,nombre:"Edouard Mendy",pos:"Portero",club:"Al-Ahli"},
+  {num:12,nombre:"Seny Dieng",pos:"Portero",club:"Middlesbrough"},
+  {num:23,nombre:"Alfred Gomis",pos:"Portero",club:"Rennes"},
+  {num:2,nombre:"Formose Mendy",pos:"Defensa",club:"Brest"},
+  {num:3,nombre:"Fode Ballo-Touré",pos:"Defensa",club:"AC Milán"},
+  {num:4,nombre:"Abdou Diallo",pos:"Defensa",club:"RB Leipzig"},
+  {num:5,nombre:"Kalidou Koulibaly",pos:"Defensa",club:"Chelsea"},
+  {num:6,nombre:"Pape Abou Cissé",pos:"Defensa",club:"Olympiacos"},
+  {num:13,nombre:"Moussa Niakhaté",pos:"Defensa",club:"Nottingham Forest"},
+  {num:14,nombre:"Youssouf Sabaly",pos:"Defensa",club:"Real Betis"},
+  {num:8,nombre:"Cheikhou Kouyaté",pos:"Mediocampista",club:"Al-Qadsiah"},
+  {num:16,nombre:"Pape Guèye",pos:"Mediocampista",club:"Marseille"},
+  {num:17,nombre:"Pathé Ciss",pos:"Mediocampista",club:"Rayo Vallecano"},
+  {num:18,nombre:"Lamine Camara",pos:"Mediocampista",club:"AS Monaco"},
+  {num:19,nombre:"Pape Matar Sarr",pos:"Mediocampista",club:"Tottenham"},
+  {num:7,nombre:"Sadio Mané",pos:"Delantero",club:"Al-Nassr"},
+  {num:9,nombre:"Boulaye Dia",pos:"Delantero",club:"Lazio"},
+  {num:10,nombre:"Ismaïla Sarr",pos:"Delantero",club:"Crystal Palace"},
+  {num:11,nombre:"Iliman Ndiaye",pos:"Delantero",club:"Everton"},
+  {num:15,nombre:"Nicolas Jackson",pos:"Delantero",club:"Chelsea"},
+  {num:20,nombre:"Krepin Diatta",pos:"Delantero",club:"AS Monaco"},
+]},
+{id:"irq",name:"Irak",flag:"[[FLAG:iq]]",grupo:"I",color:"#007A3D",coach:"Jesús Casas",
+ plantel:[
+  {num:1,nombre:"Jalal Hassan",pos:"Portero",club:"Al-Zawraa"},
+  {num:12,nombre:"Dundar Ali",pos:"Portero",club:"Al-Quwa Al-Jawiya"},
+  {num:23,nombre:"Mohammed Hussein",pos:"Portero",club:"Aluminij Kidricevo"},
+  {num:2,nombre:"Mustafa Nadhim",pos:"Defensa",club:"Al-Quwa Al-Jawiya"},
+  {num:3,nombre:"Mahmoud Ibrahim",pos:"Defensa",club:"Sanat Naft"},
+  {num:4,nombre:"Ahmed Ibrahim",pos:"Defensa",club:"Al-Shorta"},
+  {num:5,nombre:"Ali Adnan",pos:"Defensa",club:"Al-Shorta"},
+  {num:6,nombre:"Rebin Sulaka",pos:"Defensa",club:"Eintracht Frankfurt"},
+  {num:13,nombre:"Wisam Ali",pos:"Defensa",club:"Al-Zawraa"},
+  {num:8,nombre:"Amjed Attwan",pos:"Mediocampista",club:"Al-Quwa Al-Jawiya"},
+  {num:16,nombre:"Hussain Ali",pos:"Mediocampista",club:"Al-Zawraa"},
+  {num:17,nombre:"Ibraheem Bayesh",pos:"Mediocampista",club:"Al-Shorta"},
+  {num:18,nombre:"Mohammed Ali",pos:"Mediocampista",club:"Al-Zawraa"},
+  {num:7,nombre:"Mousa Al-Tamari",pos:"Delantero",club:"Rennes"},
+  {num:9,nombre:"Aymen Hussein",pos:"Delantero",club:"Al-Zawraa"},
+  {num:10,nombre:"Ameen Ali",pos:"Delantero",club:"Al-Najaf"},
+  {num:11,nombre:"Safaa Hadi",pos:"Delantero",club:"Al-Quwa Al-Jawiya"},
+]},
+{id:"nor",name:"Noruega",flag:"[[FLAG:no]]",grupo:"I",color:"#EF2B2D",coach:"Ståle Solbakken",
+ plantel:[
+  {num:1,nombre:"Ørjan Nyland",pos:"Portero",club:"Brentford"},
+  {num:12,nombre:"Egil Selvik",pos:"Portero",club:"Fredrikstad FK"},
+  {num:23,nombre:"Sander Tangvik",pos:"Portero",club:"Rosenborg"},
+  {num:2,nombre:"Kristoffer Ajer",pos:"Defensa",club:"Brentford"},
+  {num:3,nombre:"Fredrik Bjørkan",pos:"Defensa",club:"Bochum"},
+  {num:4,nombre:"Leo Østigård",pos:"Defensa",club:"Nápoles"},
+  {num:5,nombre:"Marcus Holmgren",pos:"Defensa",club:"Dinamo Zagreb"},
+  {num:13,nombre:"Julian Ryerson",pos:"Defensa",club:"Borussia Dortmund"},
+  {num:14,nombre:"Torbjørn Heggem",pos:"Defensa",club:"Lens"},
+  {num:15,nombre:"David Møller",pos:"Defensa",club:"Valerenga"},
+  {num:8,nombre:"Sander Berge",pos:"Mediocampista",club:"Burnley"},
+  {num:16,nombre:"Fredrik Aursnes",pos:"Mediocampista",club:"Benfica"},
+  {num:17,nombre:"Oscar Bobb",pos:"Mediocampista",club:"Manchester City"},
+  {num:18,nombre:"Antonio Nusa",pos:"Mediocampista",club:"Club Brugge"},
+  {num:19,nombre:"Morten Thorsby",pos:"Mediocampista",club:"Genoa"},
+  {num:20,nombre:"Kristian Thorstvedt",pos:"Mediocampista",club:"Sassuolo"},
+  {num:21,nombre:"Martin Ødegaard",pos:"Mediocampista",club:"Arsenal"},
+  {num:7,nombre:"Jens Petter Hauge",pos:"Delantero",club:"Genk"},
+  {num:9,nombre:"Erling Haaland",pos:"Delantero",club:"Manchester City"},
+  {num:10,nombre:"Alexander Sørloth",pos:"Delantero",club:"Atlético de Madrid"},
+  {num:11,nombre:"Jørgen Larsen",pos:"Delantero",club:"Sturm Graz"},
+  {num:22,nombre:"Andreas Schjelderup",pos:"Delantero",club:"Benfica"},
+]},
+/* ── GRUPO J ── */
+{id:"arg",name:"Argentina",flag:"[[FLAG:ar]]",grupo:"J",color:"#74ACDF",coach:"Lionel Scaloni",
+ plantel:[
+  {num:1,nombre:"Emiliano Martínez",pos:"Portero",club:"Aston Villa"},
+  {num:12,nombre:"Gerónimo Rulli",pos:"Portero",club:"Ajax"},
+  {num:23,nombre:"Juan Musso",pos:"Portero",club:"Atalanta"},
+  {num:2,nombre:"Gonzalo Montiel",pos:"Defensa",club:"Nottingham Forest"},
+  {num:22,nombre:"Nahuel Molina",pos:"Defensa",club:"Atlético de Madrid"},
+  {num:3,nombre:"Nicolás Tagliafico",pos:"Defensa",club:"Lyon"},
+  {num:4,nombre:"Lisandro Martínez",pos:"Defensa",club:"Manchester United"},
+  {num:5,nombre:"Nicolás Otamendi",pos:"Defensa",club:"Benfica"},
+  {num:6,nombre:"Leonardo Balerdi",pos:"Defensa",club:"Marseille"},
+  {num:13,nombre:"Cristian Romero",pos:"Defensa",club:"Tottenham"},
+  {num:14,nombre:"Facundo Medina",pos:"Defensa",club:"Lens"},
+  {num:7,nombre:"Rodrigo De Paul",pos:"Mediocampista",club:"Atlético de Madrid"},
+  {num:8,nombre:"Enzo Fernández",pos:"Mediocampista",club:"Chelsea"},
+  {num:15,nombre:"Leandro Paredes",pos:"Mediocampista",club:"Roma"},
+  {num:16,nombre:"Alexis Mac Allister",pos:"Mediocampista",club:"Liverpool"},
+  {num:17,nombre:"Exequiel Palacios",pos:"Mediocampista",club:"Bayer Leverkusen"},
+  {num:18,nombre:"Giovani Lo Celso",pos:"Mediocampista",club:"Villarreal"},
+  {num:19,nombre:"Valentín Barco",pos:"Mediocampista",club:"Brighton"},
+  {num:10,nombre:"Lionel Messi",pos:"Delantero",club:"Inter Miami"},
+  {num:9,nombre:"Lautaro Martínez",pos:"Delantero",club:"Inter de Milán"},
+  {num:11,nombre:"Julián Álvarez",pos:"Delantero",club:"Atlético de Madrid"},
+  {num:20,nombre:"Nicolás González",pos:"Delantero",club:"Juventus"},
+  {num:21,nombre:"Giuliano Simeone",pos:"Delantero",club:"Atlético de Madrid"},
+  {num:24,nombre:"Thiago Almada",pos:"Delantero",club:"Lyon"},
+  {num:25,nombre:"Nicolás Paz",pos:"Delantero",club:"Como"},
+  {num:26,nombre:"José Manuel López",pos:"Delantero",club:"Villarreal"},
+]},
+{id:"dza",name:"Argelia",flag:"[[FLAG:dz]]",grupo:"J",color:"#006233",coach:"Djamel Belmadi",
+ plantel:[
+  {num:1,nombre:"Raïs M'Bolhi",pos:"Portero",club:"Al-Ettifaq"},
+  {num:12,nombre:"Alexandre Oukidja",pos:"Portero",club:"Metz"},
+  {num:23,nombre:"Youcef Atak",pos:"Portero",club:"CR Belouizdad"},
+  {num:2,nombre:"Lyès Larbi",pos:"Defensa",club:"Trabzonspor"},
+  {num:3,nombre:"Ramy Bensebaini",pos:"Defensa",club:"Borussia Dortmund"},
+  {num:4,nombre:"Djamel Benlamri",pos:"Defensa",club:"Lyon"},
+  {num:5,nombre:"Aïssa Mandi",pos:"Defensa",club:"Villarreal"},
+  {num:6,nombre:"Youcef Atal",pos:"Defensa",club:"Nice"},
+  {num:13,nombre:"Hicham Boudaoui",pos:"Defensa",club:"Nice"},
+  {num:14,nombre:"Elias Mokwana",pos:"Defensa",club:"Esperance Tunis"},
+  {num:8,nombre:"Ismail Bennacer",pos:"Mediocampista",club:"AC Milán"},
+  {num:16,nombre:"Ramiz Zerrouki",pos:"Mediocampista",club:"Feyenoord"},
+  {num:17,nombre:"Sofiane Feghouli",pos:"Mediocampista",club:"Valencia"},
+  {num:18,nombre:"Oussama Bentaleb",pos:"Mediocampista",club:"Nottingham Forest"},
+  {num:7,nombre:"Riyad Mahrez",pos:"Delantero",club:"Al-Ahli"},
+  {num:9,nombre:"Baghdad Bounedjah",pos:"Delantero",club:"Al-Sadd"},
+  {num:10,nombre:"Islam Slimani",pos:"Delantero",club:"Lyon"},
+  {num:11,nombre:"Youcef Belaïli",pos:"Delantero",club:"Angers"},
+  {num:15,nombre:"Houssem Aouar",pos:"Delantero",club:"Bétis"},
+  {num:19,nombre:"Amine Gouiri",pos:"Delantero",club:"Stade Rennais"},
+  {num:20,nombre:"Zinedine Ferhat",pos:"Delantero",club:"Nantes"},
+]},
+{id:"aut",name:"Austria",flag:"[[FLAG:at]]",grupo:"J",color:"#ED2939",coach:"Ralf Rangnick",
+ plantel:[
+  {num:1,nombre:"Patrick Pentz",pos:"Portero",club:"Bayer Leverkusen"},
+  {num:12,nombre:"Alexander Schlager",pos:"Portero",club:"Leipzig"},
+  {num:23,nombre:"Florian Wiegele",pos:"Portero",club:"Wolfsberg"},
+  {num:3,nombre:"David Alaba",pos:"Defensa",club:"Real Madrid"},
+  {num:4,nombre:"Kevin Danso",pos:"Defensa",club:"Lens"},
+  {num:5,nombre:"Marco Friedl",pos:"Defensa",club:"Werder Bremen"},
+  {num:6,nombre:"Stefan Posch",pos:"Defensa",club:"Bologna"},
+  {num:2,nombre:"Philipp Mwene",pos:"Defensa",club:"Mainz 05"},
+  {num:13,nombre:"Philipp Lienhart",pos:"Defensa",club:"SC Freiburg"},
+  {num:14,nombre:"David Affengruber",pos:"Defensa",club:"Sturm Graz"},
+  {num:15,nombre:"Michael Svoboda",pos:"Defensa",club:"Espanyol"},
+  {num:8,nombre:"Marcel Sabitzer",pos:"Mediocampista",club:"Borussia Dortmund"},
+  {num:7,nombre:"Christoph Baumgartner",pos:"Mediocampista",club:"RB Leipzig"},
+  {num:16,nombre:"Konrad Laimer",pos:"Mediocampista",club:"Bayern Munich"},
+  {num:17,nombre:"Xaver Schlager",pos:"Mediocampista",club:"RB Leipzig"},
+  {num:18,nombre:"Nicolas Seiwald",pos:"Mediocampista",club:"RB Leipzig"},
+  {num:19,nombre:"Romano Schmid",pos:"Mediocampista",club:"Werder Bremen"},
+  {num:20,nombre:"Florian Grillitsch",pos:"Mediocampista",club:"Hoffenheim"},
+  {num:21,nombre:"Patrick Wimmer",pos:"Mediocampista",club:"Wolfsburg"},
+  {num:9,nombre:"Marko Arnautović",pos:"Delantero",club:"Inter de Milán"},
+  {num:10,nombre:"Michael Gregoritsch",pos:"Delantero",club:"SC Freiburg"},
+  {num:11,nombre:"Saša Kalajdžić",pos:"Delantero",club:"Wolverhampton"},
+]},
+{id:"jor",name:"Jordania",flag:"[[FLAG:jo]]",grupo:"J",color:"#007A3D",coach:"Hussein Ammouta",
+ plantel:[
+  {num:1,nombre:"Amer Shafi",pos:"Portero",club:"Al-Faisaly"},
+  {num:12,nombre:"Mujaheed Al-Hiary",pos:"Portero",club:"Al-Ahli"},
+  {num:23,nombre:"Omar Al-Shafei",pos:"Portero",club:"Al-Ramtha"},
+  {num:2,nombre:"Khaled Al-Ababneh",pos:"Defensa",club:"Al-Wehdat"},
+  {num:3,nombre:"Yaseen Al-Bakhit",pos:"Defensa",club:"Al-Faisaly"},
+  {num:4,nombre:"Baher Al-Sayid",pos:"Defensa",club:"Al-Hussein Irbid"},
+  {num:5,nombre:"Ahmad Hayel",pos:"Defensa",club:"Al-Qadsiah"},
+  {num:6,nombre:"Noor Mansour",pos:"Defensa",club:"Al-Wehdat"},
+  {num:13,nombre:"Ahmad Ibrahim",pos:"Defensa",club:"Al-Faisaly"},
+  {num:8,nombre:"Yazan Al-Naimat",pos:"Mediocampista",club:"Al-Wahdat"},
+  {num:16,nombre:"Ahmad Al-Ali",pos:"Mediocampista",club:"Al-Wehdat"},
+  {num:17,nombre:"Mohammad Abu Zraiq",pos:"Mediocampista",club:"Raja Casablanca"},
+  {num:18,nombre:"Ahmad Saleh",pos:"Mediocampista",club:"Al-Faisaly"},
+  {num:7,nombre:"Mousa Al-Tamari",pos:"Delantero",club:"Montpellier"},
+  {num:9,nombre:"Baha Faisal",pos:"Delantero",club:"Al-Faisaly"},
+  {num:10,nombre:"Ali Olwan",pos:"Delantero",club:"Al-Sailiaya"},
+  {num:11,nombre:"Ibrahim Jabr",pos:"Delantero",club:"Al-Ahli"},
+]},
+/* ── GRUPO K ── */
+{id:"por",name:"Portugal",flag:"[[FLAG:pt]]",grupo:"K",color:"#006600",coach:"Roberto Martínez",
+ plantel:[
+  {num:1,nombre:"Diogo Costa",pos:"Portero",club:"Porto"},
+  {num:12,nombre:"José Sá",pos:"Portero",club:"Wolverhampton"},
+  {num:22,nombre:"Rui Silva",pos:"Portero",club:"Sporting CP"},
+  {num:24,nombre:"Ricardo Velho",pos:"Portero",club:"Gençlerbirliği"},
+  {num:2,nombre:"Diogo Dalot",pos:"Defensa",club:"Manchester United"},
+  {num:14,nombre:"Matheus Nunes",pos:"Defensa",club:"Manchester City"},
+  {num:20,nombre:"Nélson Semedo",pos:"Defensa",club:"Fenerbahce"},
+  {num:3,nombre:"João Cancelo",pos:"Defensa",club:"Al-Hilal"},
+  {num:5,nombre:"Nuno Mendes",pos:"Defensa",club:"PSG"},
+  {num:13,nombre:"Gonçalo Inácio",pos:"Defensa",club:"Sporting CP"},
+  {num:16,nombre:"Renato Veiga",pos:"Defensa",club:"Villarreal"},
+  {num:4,nombre:"Rúben Dias",pos:"Defensa",club:"Manchester City"},
+  {num:17,nombre:"Tomás Araújo",pos:"Defensa",club:"Benfica"},
+  {num:25,nombre:"Rúben Neves",pos:"Mediocampista",club:"Al-Hilal"},
+  {num:26,nombre:"Samuel Costa",pos:"Mediocampista",club:"Mainz 05"},
+  {num:18,nombre:"João Neves",pos:"Mediocampista",club:"PSG"},
+  {num:10,nombre:"Bernardo Silva",pos:"Mediocampista",club:"Manchester City"},
+  {num:8,nombre:"Bruno Fernandes",pos:"Mediocampista",club:"Manchester United"},
+  {num:6,nombre:"Vitinha",pos:"Mediocampista",club:"PSG"},
+  {num:11,nombre:"João Félix",pos:"Delantero",club:"Chelsea"},
+  {num:9,nombre:"Cristiano Ronaldo",pos:"Delantero",club:"Al-Nassr"},
+  {num:15,nombre:"Francisco Conceição",pos:"Delantero",club:"Juventus"},
+  {num:7,nombre:"Rafael Leão",pos:"Delantero",club:"AC Milán"},
+  {num:19,nombre:"Pedro Neto",pos:"Delantero",club:"Chelsea"},
+  {num:21,nombre:"Gonçalo Guedes",pos:"Delantero",club:"Wolverhampton"},
+  {num:23,nombre:"Gonçalo Ramos",pos:"Delantero",club:"PSG"},
+]},
+{id:"uzb",name:"Uzbekistán",flag:"[[FLAG:uz]]",grupo:"K",color:"#1EB53A",coach:"Srecko Katanec",
+ plantel:[
+  {num:1,nombre:"Utkir Yusupov",pos:"Portero",club:"Pakhtakor"},
+  {num:12,nombre:"Oybek Kilichev",pos:"Portero",club:"Nasaf"},
+  {num:23,nombre:"Eldor Shomurodov",pos:"Portero",club:"Neftchi Fergana"},
+  {num:2,nombre:"Dostonbek Khamdamov",pos:"Defensa",club:"Pakhtakor"},
+  {num:3,nombre:"Islombek Kobilov",pos:"Defensa",club:"Pakhtakor"},
+  {num:4,nombre:"Saidakbar Kholmatov",pos:"Defensa",club:"Sogdiana"},
+  {num:5,nombre:"Jahongir Abduraximov",pos:"Defensa",club:"Pakhtakor"},
+  {num:6,nombre:"Hamza Karimov",pos:"Defensa",club:"CSKA Moscú"},
+  {num:13,nombre:"Ravshan Irmatov",pos:"Defensa",club:"Pakhtakor"},
+  {num:14,nombre:"Abdukodir Khusanov",pos:"Defensa",club:"Manchester City"},
+  {num:8,nombre:"Otabek Shukurov",pos:"Mediocampista",club:"Pakhtakor"},
+  {num:16,nombre:"Bobur Abdixoliqov",pos:"Mediocampista",club:"Lokomotiv Tashkent"},
+  {num:17,nombre:"Jasur Yakhshiboev",pos:"Mediocampista",club:"Torpedo Moscow"},
+  {num:18,nombre:"Jaloliddin Masharipov",pos:"Mediocampista",club:"Pakhtakor"},
+  {num:7,nombre:"Eldor Shomurodov",pos:"Delantero",club:"Roma"},
+  {num:9,nombre:"Dostonbek Toursunov",pos:"Delantero",club:"Pakhtakor"},
+  {num:10,nombre:"Hojimat Erkinov",pos:"Delantero",club:"Pakhtakor"},
+  {num:11,nombre:"Umid Hasanov",pos:"Delantero",club:"Pakhtakor"},
+]},
+{id:"cdo",name:"RD Congo",flag:"[[FLAG:cd]]",grupo:"K",color:"#007FFF",coach:"Sébastien Desabre",
+ plantel:[
+  {num:1,nombre:"Joël Kiassumbua",pos:"Portero",club:"Yeni Malatyaspor"},
+  {num:12,nombre:"Jonas Raess",pos:"Portero",club:"Grasshopper"},
+  {num:23,nombre:"Ley Matampi",pos:"Portero",club:"AS Vita Club"},
+  {num:2,nombre:"Marcel Tisserand",pos:"Defensa",club:"Fenerbahce"},
+  {num:3,nombre:"Meschak Elia",pos:"Defensa",club:"Young Boys"},
+  {num:4,nombre:"Christian Luyindama",pos:"Defensa",club:"Galatasaray"},
+  {num:5,nombre:"Chancel Mbemba",pos:"Defensa",club:"Marseille"},
+  {num:6,nombre:"Éric Baïly",pos:"Defensa",club:"Villarreal"},
+  {num:13,nombre:"Arthur Masuaku",pos:"Defensa",club:"Besiktas"},
+  {num:14,nombre:"Dylan Mbayo",pos:"Defensa",club:"Kortrijk"},
+  {num:8,nombre:"Yoane Wissa",pos:"Mediocampista",club:"Brentford"},
+  {num:16,nombre:"Cédric Bakambu",pos:"Mediocampista",club:"Olympique Marsella"},
+  {num:17,nombre:"Gaël Kakuta",pos:"Mediocampista",club:"Amiens"},
+  {num:18,nombre:"Théo Bongonda",pos:"Mediocampista",club:"Celta de Vigo"},
+  {num:7,nombre:"Silas Katompa",pos:"Delantero",club:"VfB Stuttgart"},
+  {num:9,nombre:"Dieumerci Mbokani",pos:"Delantero",club:"Anderlecht"},
+  {num:10,nombre:"Keita Baldé",pos:"Delantero",club:"Sin club"},
+  {num:11,nombre:"Jonathan David",pos:"Delantero",club:"Juventus"},
+  {num:15,nombre:"Lois Openda",pos:"Delantero",club:"RB Leipzig"},
+  {num:19,nombre:"Oriol Romeu",pos:"Delantero",club:"Girona"},
+]},
+{id:"col",name:"Colombia",flag:"[[FLAG:co]]",grupo:"K",color:"#FCD116",coach:"Néstor Lorenzo",
+ plantel:[
+  {num:1,nombre:"David Ospina",pos:"Portero",club:"Al-Qadsiah"},
+  {num:12,nombre:"Álvaro Montero",pos:"Portero",club:"Millonarios"},
+  {num:23,nombre:"Camilo Vargas",pos:"Portero",club:"Atlas"},
+  {num:2,nombre:"Daniel Muñoz",pos:"Defensa",club:"Crystal Palace"},
+  {num:3,nombre:"Álvaro Angulo",pos:"Defensa",club:"Junior"},
+  {num:4,nombre:"Davinson Sánchez",pos:"Defensa",club:"Galatasaray"},
+  {num:5,nombre:"Santiago Arias",pos:"Defensa",club:"Bayer Leverkusen"},
+  {num:6,nombre:"Johan Mojica",pos:"Defensa",club:"Olympique Lyon"},
+  {num:13,nombre:"Jhon Lucumí",pos:"Defensa",club:"Bologna"},
+  {num:14,nombre:"Willer Ditta",pos:"Defensa",club:"Girona"},
+  {num:15,nombre:"Deiver Machado",pos:"Defensa",club:"Lens"},
+  {num:8,nombre:"James Rodríguez",pos:"Mediocampista",club:"Rayo Vallecano"},
+  {num:16,nombre:"Jefferson Lerma",pos:"Mediocampista",club:"Crystal Palace"},
+  {num:17,nombre:"Richard Ríos",pos:"Mediocampista",club:"Palmeiras"},
+  {num:18,nombre:"Jorge Carrascal",pos:"Mediocampista",club:"CSKA Moscú"},
+  {num:19,nombre:"Juan Camilo Portilla",pos:"Mediocampista",club:"Envigado"},
+  {num:20,nombre:"Jhon Arias",pos:"Mediocampista",club:"Fluminense"},
+  {num:7,nombre:"Luis Díaz",pos:"Delantero",club:"Liverpool"},
+  {num:9,nombre:"Jhon Córdoba",pos:"Delantero",club:"Krasnodar"},
+  {num:10,nombre:"James Rodríguez",pos:"Delantero",club:"Rayo Vallecano"},
+  {num:11,nombre:"Jhon Durán",pos:"Delantero",club:"Aston Villa"},
+  {num:21,nombre:"Cucho Hernández",pos:"Delantero",club:"Columbus Crew"},
+  {num:22,nombre:"Jaminton Campaz",pos:"Delantero",club:"Querétaro"},
+]},
+/* ── GRUPO L ── */
+{id:"ing",name:"Inglaterra",flag:"[[FLAG:gb-eng]]",grupo:"L",color:"#003366",coach:"Thomas Tuchel",
+ plantel:[
+  {num:1,nombre:"Jordan Pickford",pos:"Portero",club:"Everton"},
+  {num:12,nombre:"Dean Henderson",pos:"Portero",club:"Crystal Palace"},
+  {num:23,nombre:"James Trafford",pos:"Portero",club:"Burnley"},
+  {num:2,nombre:"Reece James",pos:"Defensa",club:"Chelsea"},
+  {num:3,nombre:"Dan Burn",pos:"Defensa",club:"Newcastle"},
+  {num:4,nombre:"John Stones",pos:"Defensa",club:"Manchester City"},
+  {num:5,nombre:"Marc Guéhi",pos:"Defensa",club:"Crystal Palace"},
+  {num:6,nombre:"Ezri Konsa",pos:"Defensa",club:"Aston Villa"},
+  {num:13,nombre:"Tino Livramento",pos:"Defensa",club:"Newcastle"},
+  {num:14,nombre:"Nico O'Reilly",pos:"Defensa",club:"Manchester City"},
+  {num:15,nombre:"Jarell Quansah",pos:"Defensa",club:"Liverpool"},
+  {num:16,nombre:"Djed Spence",pos:"Defensa",club:"Genoa"},
+  {num:8,nombre:"Declan Rice",pos:"Mediocampista",club:"Arsenal"},
+  {num:10,nombre:"Jude Bellingham",pos:"Mediocampista",club:"Real Madrid"},
+  {num:17,nombre:"Elliot Anderson",pos:"Mediocampista",club:"Nottingham Forest"},
+  {num:18,nombre:"Eberechi Eze",pos:"Mediocampista",club:"Crystal Palace"},
+  {num:19,nombre:"Jordan Henderson",pos:"Mediocampista",club:"Ajax"},
+  {num:20,nombre:"Kobbie Mainoo",pos:"Mediocampista",club:"Manchester United"},
+  {num:21,nombre:"Morgan Rogers",pos:"Mediocampista",club:"Aston Villa"},
+  {num:9,nombre:"Harry Kane",pos:"Delantero",club:"Bayern Munich"},
+  {num:7,nombre:"Bukayo Saka",pos:"Delantero",club:"Arsenal"},
+  {num:11,nombre:"Marcus Rashford",pos:"Delantero",club:"Aston Villa"},
+  {num:22,nombre:"Anthony Gordon",pos:"Delantero",club:"Liverpool"},
+  {num:24,nombre:"Noni Madueke",pos:"Delantero",club:"Chelsea"},
+  {num:25,nombre:"Ivan Toney",pos:"Delantero",club:"Al-Ahli"},
+  {num:26,nombre:"Ollie Watkins",pos:"Delantero",club:"Aston Villa"},
+]},
+{id:"cro",name:"Croacia",flag:"[[FLAG:hr]]",grupo:"L",color:"#171796",coach:"Zlatko Dalic",
+ plantel:[
+  {num:1,nombre:"Dominik Livaković",pos:"Portero",club:"Fenerbahce"},
+  {num:12,nombre:"Dominik Kotarski",pos:"Portero",club:"Al-Qadsiah"},
+  {num:23,nombre:"Ivor Pandur",pos:"Portero",club:"Westerlo"},
+  {num:2,nombre:"Josip Stanišić",pos:"Defensa",club:"Bayer Leverkusen"},
+  {num:3,nombre:"Joško Gvardiol",pos:"Defensa",club:"Manchester City"},
+  {num:4,nombre:"Martin Erlić",pos:"Defensa",club:"RB Leipzig"},
+  {num:5,nombre:"Duje Ćaleta-Car",pos:"Defensa",club:"Southampton"},
+  {num:6,nombre:"Marin Pongračić",pos:"Defensa",club:"Fiorentina"},
+  {num:13,nombre:"Josip Šutalo",pos:"Defensa",club:"Ajax"},
+  {num:14,nombre:"Lukas Vušković",pos:"Defensa",club:"Tottenham"},
+  {num:8,nombre:"Mateo Kovačić",pos:"Mediocampista",club:"Manchester City"},
+  {num:10,nombre:"Luka Modrić",pos:"Mediocampista",club:"Real Madrid"},
+  {num:16,nombre:"Mario Pašalić",pos:"Mediocampista",club:"Atalanta"},
+  {num:17,nombre:"Nikola Vlašić",pos:"Mediocampista",club:"Torino"},
+  {num:18,nombre:"Luka Sučić",pos:"Mediocampista",club:"RB Salzburg"},
+  {num:19,nombre:"Martin Baturina",pos:"Mediocampista",club:"Chelsea"},
+  {num:20,nombre:"Kristijan Jakić",pos:"Mediocampista",club:"Eintracht Frankfurt"},
+  {num:21,nombre:"Nikola Moro",pos:"Mediocampista",club:"Dynamo Moscú"},
+  {num:22,nombre:"Toni Fruk",pos:"Mediocampista",club:"Rijeka"},
+  {num:7,nombre:"Ivan Perišić",pos:"Delantero",club:"Hajduk Split"},
+  {num:9,nombre:"Andrej Kramarić",pos:"Delantero",club:"Hoffenheim"},
+  {num:11,nombre:"Ante Budimir",pos:"Delantero",club:"Osasuna"},
+  {num:15,nombre:"Petar Musa",pos:"Delantero",club:"Benfica"},
+  {num:24,nombre:"Igor Matanović",pos:"Delantero",club:"Eintracht Frankfurt"},
+]},
+{id:"gha",name:"Ghana",flag:"[[FLAG:gh]]",grupo:"L",color:"#006B3F",coach:"Carlos Queiroz",
+ plantel:[
+  {num:1,nombre:"Lawrence Ati-Zigi",pos:"Portero",club:"FC St. Gallen"},
+  {num:12,nombre:"Benjamin Asare",pos:"Portero",club:"Accra Hearts of Oak"},
+  {num:23,nombre:"Joseph Anang",pos:"Portero",club:"West Ham"},
+  {num:2,nombre:"Alidu Seidu",pos:"Defensa",club:"Clermont Foot"},
+  {num:3,nombre:"Gideon Mensah",pos:"Defensa",club:"Real Betis"},
+  {num:4,nombre:"Daniel Amartey",pos:"Defensa",club:"Leicester City"},
+  {num:5,nombre:"Joseph Aidoo",pos:"Defensa",club:"Celta de Vigo"},
+  {num:6,nombre:"Alexander Djiku",pos:"Defensa",club:"Fenerbahce"},
+  {num:13,nombre:"Tariq Lamptey",pos:"Defensa",club:"Brighton"},
+  {num:14,nombre:"Abdul-Rahman Baba",pos:"Defensa",club:"Reading"},
+  {num:8,nombre:"Thomas Partey",pos:"Mediocampista",club:"Arsenal"},
+  {num:16,nombre:"Mohammed Kudus",pos:"Mediocampista",club:"West Ham"},
+  {num:17,nombre:"Salis Abdul Samed",pos:"Mediocampista",club:"Lens"},
+  {num:18,nombre:"Daniel Kofi Kyereh",pos:"Mediocampista",club:"SC Freiburg"},
+  {num:7,nombre:"Jordan Ayew",pos:"Delantero",club:"Leicester City"},
+  {num:9,nombre:"André Ayew",pos:"Delantero",club:"Sin club"},
+  {num:10,nombre:"Kamaldeen Sulemana",pos:"Delantero",club:"Southampton"},
+  {num:11,nombre:"Iñaki Williams",pos:"Delantero",club:"Athletic Club"},
+  {num:15,nombre:"Antoine Semenyo",pos:"Delantero",club:"Bournemouth"},
+  {num:19,nombre:"Kudus Mohammed",pos:"Delantero",club:"West Ham"},
+  {num:20,nombre:"Abdul Fatawu Issahaku",pos:"Delantero",club:"Leicester City"},
+]},
+{id:"pan",name:"Panamá",flag:"[[FLAG:pa]]",grupo:"L",color:"#DA121A",coach:"Thomas Christiansen",
+ plantel:[
+  {num:1,nombre:"Orlando Mosquera",pos:"Portero",club:"FC Dallas"},
+  {num:12,nombre:"Luis Mejía",pos:"Portero",club:"Independiente Medellín"},
+  {num:23,nombre:"César Samudio",pos:"Portero",club:"Atlético Chiriquí"},
+  {num:2,nombre:"César Blackman",pos:"Defensa",club:"Sturm Graz"},
+  {num:3,nombre:"Amir Murillo",pos:"Defensa",club:"RSC Anderlecht"},
+  {num:4,nombre:"Fidel Escobar",pos:"Defensa",club:"New York Red Bulls"},
+  {num:5,nombre:"Andrés Andrade",pos:"Defensa",club:"Cuiabá"},
+  {num:6,nombre:"Edgardo Fariña",pos:"Defensa",club:"Sin club"},
+  {num:13,nombre:"José Córdoba",pos:"Defensa",club:"Cádiz"},
+  {num:14,nombre:"Eric Davis",pos:"Defensa",club:"Panathinaikos"},
+  {num:15,nombre:"Jiovany Ramos",pos:"Defensa",club:"Atlanta United"},
+  {num:16,nombre:"Roderick Miller",pos:"Defensa",club:"Pafos FC"},
+  {num:8,nombre:"Aníbal Godoy",pos:"Mediocampista",club:"Nashville SC"},
+  {num:17,nombre:"Carlos Harvey",pos:"Mediocampista",club:"Independiente"},
+  {num:18,nombre:"Adalberto Carrasquilla",pos:"Mediocampista",club:"Watford"},
+  {num:19,nombre:"Yoel Bárcenas",pos:"Mediocampista",club:"Qarabag"},
+  {num:20,nombre:"Alberto Quintero",pos:"Mediocampista",club:"Sin club"},
+  {num:21,nombre:"Azarías Londoño",pos:"Mediocampista",club:"Millonarios"},
+  {num:7,nombre:"Ismael Díaz",pos:"Delantero",club:"Club Brugge"},
+  {num:9,nombre:"José Fajardo",pos:"Delantero",club:"Almería"},
+  {num:10,nombre:"Cecilio Waterman",pos:"Delantero",club:"Sin club"},
+  {num:11,nombre:"Tomás Rodríguez",pos:"Delantero",club:"Estudiantes"},
+]},
+];
+
+
+const FIXTURE = [
+  {date:"Jue 11 jun",matches:[
+    {time:"15:00",t:"M\u00E9xico [[FLAG:mx]] vs. Sud\u00E1frica [[FLAG:za]]",grp:"A",venue:"Ciudad de M\u00E9xico",tv:["CHV","DS","PM","DIS"],must:true},
+    {time:"22:00",t:"Corea del Sur [[FLAG:kr]] vs. Rep. Checa [[FLAG:cz]]",grp:"A",venue:"Guadalajara",tv:["DS","PM"]}
+  ]},
+  {date:"Vie 12 jun",matches:[
+    {time:"15:00",t:"Canad\u00E1 [[FLAG:ca]] vs. Bosnia-Herz. [[FLAG:ba]]",grp:"B",venue:"Toronto",tv:["CHV","DS","PM"]},
+    {time:"21:00",t:"EE.UU. [[FLAG:us]] vs. Paraguay [[FLAG:py]]",grp:"D",venue:"Los \u00C1ngeles",tv:["CHV","DS","PM","DIS"]}
+  ]},
+  {date:"S\u00E1b 13 jun",matches:[
+    {time:"15:00",t:"Qatar [[FLAG:qa]] vs. Suiza [[FLAG:ch]]",grp:"B",venue:"San Francisco",tv:["DS","PM"]},
+    {time:"18:00",t:"Brasil [[FLAG:br]] vs. Marruecos [[FLAG:ma]]",grp:"C",venue:"Nueva Jersey",tv:["CHV","DS","PM"],must:true},
+    {time:"21:00",t:"Hait\u00ED [[FLAG:ht]] vs. Escocia [[FLAG:gb-sct]]",grp:"C",venue:"Boston",tv:["DS","PM"]},
+    {time:"00:00*",t:"Australia [[FLAG:au]] vs. Turqu\u00EDa [[FLAG:tr]]",grp:"D",venue:"Vancouver",tv:["DS","PM"]}
+  ]},
+  {date:"Dom 14 jun",matches:[
+    {time:"13:00",t:"Alemania [[FLAG:de]] vs. Curazao [[FLAG:cw]]",grp:"E",venue:"Houston",tv:["CHV","DS","PM"]},
+    {time:"16:00",t:"Pa\u00EDses Bajos [[FLAG:nl]] vs. Jap\u00F3n [[FLAG:jp]]",grp:"F",venue:"Dallas",tv:["CHV","DS","PM"]},
+    {time:"19:00",t:"Costa de Marfil [[FLAG:ci]] vs. Ecuador [[FLAG:ec]]",grp:"E",venue:"Philadelphia",tv:["DS","PM"]},
+    {time:"22:00",t:"Suecia [[FLAG:se]] vs. T\u00FAnez [[FLAG:tn]]",grp:"F",venue:"Monterrey",tv:["DS","PM"]}
+  ]},
+  {date:"Lun 15 jun",matches:[
+    {time:"12:00",t:"Espa\u00F1a [[FLAG:es]] vs. Cabo Verde [[FLAG:cv]]",grp:"H",venue:"Atlanta",tv:["CHV","DS","PM"]},
+    {time:"15:00",t:"B\u00E9lgica [[FLAG:be]] vs. Egipto [[FLAG:eg]]",grp:"G",venue:"Seattle",tv:["CHV","DS","PM"],must:true},
+    {time:"18:00",t:"Arabia Saudita [[FLAG:sa]] vs. Uruguay [[FLAG:uy]]",grp:"H",venue:"Miami",tv:["CHV","DS","PM","DIS"]},
+    {time:"21:00",t:"Ir\u00E1n [[FLAG:ir]] vs. Nueva Zelanda [[FLAG:nz]]",grp:"G",venue:"Los \u00C1ngeles",tv:["DS","PM"]}
+  ]},
+  {date:"Mar 16 jun",matches:[
+    {time:"15:00",t:"Francia [[FLAG:fr]] vs. Senegal [[FLAG:sn]]",grp:"I",venue:"Nueva Jersey",tv:["CHV","DS","PM","DIS"],must:true},
+    {time:"18:00",t:"Irak [[FLAG:iq]] vs. Noruega [[FLAG:no]]",grp:"I",venue:"Boston",tv:["DS","PM"]},
+    {time:"21:00",t:"Argentina [[FLAG:ar]] vs. Argelia [[FLAG:dz]]",grp:"J",venue:"Kansas City",tv:["CHV","DS","PM"]},
+    {time:"00:00*",t:"Austria [[FLAG:at]] vs. Jordania [[FLAG:jo]]",grp:"J",venue:"San Francisco",tv:["DS","PM"]}
+  ]},
+  {date:"Mi\u00E9 17 jun",matches:[
+    {time:"13:00",t:"Portugal [[FLAG:pt]] vs. RD Congo [[FLAG:cd]]",grp:"K",venue:"Houston",tv:["CHV","DS","PM"]},
+    {time:"16:00",t:"Inglaterra [[FLAG:gb-eng]] vs. Croacia [[FLAG:hr]]",grp:"L",venue:"Dallas",tv:["CHV","DS","PM"],must:true},
+    {time:"19:00",t:"Ghana [[FLAG:gh]] vs. Panam\u00E1 [[FLAG:pa]]",grp:"L",venue:"Toronto",tv:["DS","PM"]},
+    {time:"22:00",t:"Uzbekist\u00E1n [[FLAG:uz]] vs. Colombia [[FLAG:co]]",grp:"K",venue:"Ciudad de M\u00E9xico",tv:["CHV","DS","PM"]}
+  ]},
+  {date:"Jue 18 jun",matches:[
+    {time:"12:00",t:"Rep. Checa [[FLAG:cz]] vs. Sud\u00E1frica [[FLAG:za]]",grp:"A",venue:"Atlanta",tv:["DS","PM"]},
+    {time:"15:00",t:"Suiza [[FLAG:ch]] vs. Bosnia-Herz. [[FLAG:ba]]",grp:"B",venue:"Los \u00C1ngeles",tv:["DS","PM"]},
+    {time:"18:00",t:"Canad\u00E1 [[FLAG:ca]] vs. Qatar [[FLAG:qa]]",grp:"B",venue:"Vancouver",tv:["CHV","DS","PM"]},
+    {time:"21:00",t:"M\u00E9xico [[FLAG:mx]] vs. Corea del Sur [[FLAG:kr]]",grp:"A",venue:"Guadalajara",tv:["CHV","DS","PM"]}
+  ]},
+  {date:"Vie 19 jun",matches:[
+    {time:"15:00",t:"EE.UU. [[FLAG:us]] vs. Australia [[FLAG:au]]",grp:"D",venue:"Seattle",tv:["CHV","DS","PM"]},
+    {time:"18:00",t:"Escocia [[FLAG:gb-sct]] vs. Marruecos [[FLAG:ma]]",grp:"C",venue:"Boston",tv:["DS","PM"]},
+    {time:"20:30",t:"Brasil [[FLAG:br]] vs. Hait\u00ED [[FLAG:ht]]",grp:"C",venue:"Philadelphia",tv:["CHV","DS","PM"]},
+    {time:"23:00",t:"Turqu\u00EDa [[FLAG:tr]] vs. Paraguay [[FLAG:py]]",grp:"D",venue:"San Francisco",tv:["DS","PM"]}
+  ]},
+  {date:"S\u00E1b 20 jun",matches:[
+    {time:"13:00",t:"Pa\u00EDses Bajos [[FLAG:nl]] vs. Suecia [[FLAG:se]]",grp:"F",venue:"Houston",tv:["CHV","DS","PM"]},
+    {time:"16:00",t:"Alemania [[FLAG:de]] vs. Costa de Marfil [[FLAG:ci]]",grp:"E",venue:"Toronto",tv:["CHV","DS","PM"],must:true},
+    {time:"22:00",t:"Ecuador [[FLAG:ec]] vs. Curazao [[FLAG:cw]]",grp:"E",venue:"Kansas City",tv:["DS","PM"]},
+    {time:"00:00*",t:"T\u00FAnez [[FLAG:tn]] vs. Jap\u00F3n [[FLAG:jp]]",grp:"F",venue:"Monterrey",tv:["DS","PM"]}
+  ]},
+  {date:"Dom 21 jun",matches:[
+    {time:"12:00",t:"Espa\u00F1a [[FLAG:es]] vs. Arabia Saudita [[FLAG:sa]]",grp:"H",venue:"Atlanta",tv:["CHV","DS","PM"],must:true},
+    {time:"15:00",t:"B\u00E9lgica [[FLAG:be]] vs. Ir\u00E1n [[FLAG:ir]]",grp:"G",venue:"Los \u00C1ngeles",tv:["DS","PM"]},
+    {time:"18:00",t:"Uruguay [[FLAG:uy]] vs. Cabo Verde [[FLAG:cv]]",grp:"H",venue:"Miami",tv:["CHV","DS","PM"]},
+    {time:"21:00",t:"Nueva Zelanda [[FLAG:nz]] vs. Egipto [[FLAG:eg]]",grp:"G",venue:"Vancouver",tv:["DS","PM"]}
+  ]},
+  {date:"Lun 22 jun",matches:[
+    {time:"13:00",t:"Argentina [[FLAG:ar]] vs. Austria [[FLAG:at]]",grp:"J",venue:"Dallas",tv:["CHV","DS","PM"]},
+    {time:"17:00",t:"Francia [[FLAG:fr]] vs. Irak [[FLAG:iq]]",grp:"I",venue:"Philadelphia",tv:["CHV","DS","PM"]},
+    {time:"20:00",t:"Noruega [[FLAG:no]] vs. Senegal [[FLAG:sn]]",grp:"I",venue:"Nueva Jersey",tv:["CHV","DS","PM"],must:true},
+    {time:"23:00",t:"Jordania [[FLAG:jo]] vs. Argelia [[FLAG:dz]]",grp:"J",venue:"San Francisco",tv:["DS","PM"]}
+  ]},
+  {date:"Mar 23 jun",matches:[
+    {time:"13:00",t:"Portugal [[FLAG:pt]] vs. Uzbekist\u00E1n [[FLAG:uz]]",grp:"K",venue:"Houston",tv:["CHV","DS","PM"]},
+    {time:"16:00",t:"Inglaterra [[FLAG:gb-eng]] vs. Ghana [[FLAG:gh]]",grp:"L",venue:"Boston",tv:["CHV","DS","PM"]},
+    {time:"19:00",t:"Panam\u00E1 [[FLAG:pa]] vs. Croacia [[FLAG:hr]]",grp:"L",venue:"Toronto",tv:["DS","PM"]},
+    {time:"22:00",t:"Colombia [[FLAG:co]] vs. RD Congo [[FLAG:cd]]",grp:"K",venue:"Guadalajara",tv:["CHV","DS","PM"]}
+  ]},
+  {date:"Mi\u00E9 24 jun",matches:[
+    {time:"15:00",t:"Suiza [[FLAG:ch]] vs. Canad\u00E1 [[FLAG:ca]]",grp:"B",venue:"Vancouver",tv:["DS","PM"]},
+    {time:"15:00",t:"Bosnia-Herz. [[FLAG:ba]] vs. Qatar [[FLAG:qa]]",grp:"B",venue:"Seattle",tv:["DS","PM"]},
+    {time:"19:00",t:"M\u00E9xico [[FLAG:mx]] vs. Rep. Checa [[FLAG:cz]]",grp:"A",venue:"Ciudad de M\u00E9xico",tv:["CHV","DS","PM"]},
+    {time:"19:00",t:"Sud\u00E1frica [[FLAG:za]] vs. Corea del Sur [[FLAG:kr]]",grp:"A",venue:"Monterrey",tv:["DS","PM"]},
+    {time:"19:00",t:"Brasil [[FLAG:br]] vs. Escocia [[FLAG:gb-sct]]",grp:"C",venue:"Miami",tv:["CHV","DS","PM"]},
+    {time:"19:00",t:"Marruecos [[FLAG:ma]] vs. Hait\u00ED [[FLAG:ht]]",grp:"C",venue:"Atlanta",tv:["DS","PM"]}
+  ]},
+  {date:"Jue 25 jun",matches:[
+    {time:"19:00",t:"Paraguay [[FLAG:py]] vs. Australia [[FLAG:au]]",grp:"D",venue:"San Francisco",tv:["DS","PM"]},
+    {time:"19:00",t:"EE.UU. [[FLAG:us]] vs. Turqu\u00EDa [[FLAG:tr]]",grp:"D",venue:"Los \u00C1ngeles",tv:["CHV","DS","PM"]},
+    {time:"19:00",t:"Alemania [[FLAG:de]] vs. Ecuador [[FLAG:ec]]",grp:"E",venue:"Houston",tv:["DS","PM"]},
+    {time:"19:00",t:"Costa de Marfil [[FLAG:ci]] vs. Curazao [[FLAG:cw]]",grp:"E",venue:"Toronto",tv:["DS","PM"]}
+  ]},
+  {date:"Vie 26 jun",matches:[
+    {time:"19:00",t:"Pa\u00EDses Bajos [[FLAG:nl]] vs. T\u00FAnez [[FLAG:tn]]",grp:"F",venue:"Dallas",tv:["DS","PM"]},
+    {time:"19:00",t:"Suecia [[FLAG:se]] vs. Jap\u00F3n [[FLAG:jp]]",grp:"F",venue:"Monterrey",tv:["DS","PM"]},
+    {time:"19:00",t:"B\u00E9lgica [[FLAG:be]] vs. Nueva Zelanda [[FLAG:nz]]",grp:"G",venue:"Seattle",tv:["DS","PM"]},
+    {time:"19:00",t:"Egipto [[FLAG:eg]] vs. Ir\u00E1n [[FLAG:ir]]",grp:"G",venue:"Los \u00C1ngeles",tv:["DS","PM"]},
+    {time:"20:00",t:"Espa\u00F1a [[FLAG:es]] vs. Uruguay [[FLAG:uy]]",grp:"H",venue:"Por confirmar",tv:["CHV","DS","PM"],must:true}
+  ]},
+  {date:"S\u00E1b 27 jun",matches:[
+    {time:"16:00",t:"Francia [[FLAG:fr]] vs. Noruega [[FLAG:no]]",grp:"I",venue:"Por confirmar",tv:["CHV","DS","PM"],must:true},
+    {time:"16:00",t:"Senegal [[FLAG:sn]] vs. Irak [[FLAG:iq]]",grp:"I",venue:"Por confirmar",tv:["DS","PM"]},
+    {time:"16:00",t:"Argentina [[FLAG:ar]] vs. Jordania [[FLAG:jo]]",grp:"J",venue:"Por confirmar",tv:["CHV","DS","PM"]},
+    {time:"16:00",t:"Argelia [[FLAG:dz]] vs. Austria [[FLAG:at]]",grp:"J",venue:"Por confirmar",tv:["DS","PM"]},
+    {time:"19:30",t:"Portugal [[FLAG:pt]] vs. Colombia [[FLAG:co]]",grp:"K",venue:"Por confirmar",tv:["CHV","DS","PM"],must:true},
+    {time:"19:30",t:"RD Congo [[FLAG:cd]] vs. Uzbekist\u00E1n [[FLAG:uz]]",grp:"K",venue:"Por confirmar",tv:["DS","PM"]},
+    {time:"19:30",t:"Inglaterra [[FLAG:gb-eng]] vs. Panam\u00E1 [[FLAG:pa]]",grp:"L",venue:"Por confirmar",tv:["CHV","DS","PM"]},
+    {time:"19:30",t:"Croacia [[FLAG:hr]] vs. Ghana [[FLAG:gh]]",grp:"L",venue:"Por confirmar",tv:["DS","PM"]}
+  ]},
+  {date:"29 jun \u2013 5 jul",matches:[{time:"\u2013",t:"Ronda de 32 \u00B7 16 partidos",grp:"R32",venue:"Cruces por definir",tv:["DS","PM"]}]},
+  {date:"7 \u2013 10 jul",matches:[{time:"\u2013",t:"Octavos de final \u00B7 8 partidos",grp:"8vos",venue:"Varias sedes",tv:["DS","PM","DIS"]}]},
+  {date:"12 \u2013 13 jul",matches:[{time:"\u2013",t:"Cuartos de final \u00B7 4 partidos",grp:"4tos",venue:"Varias sedes",tv:["DS","PM","DIS"]}]},
+  {date:"15 \u2013 16 jul",matches:[{time:"\u2013",t:"Semifinales \u00B7 Dallas y Atlanta",grp:"SF",venue:"Dallas / Atlanta",tv:["DS","PM","DIS"]}]},
+  {date:"S\u00E1b 18 jul",matches:[{time:"\u2013",t:"Tercer lugar \u00B7 Miami",grp:"3ro",venue:"Miami",tv:["DS","PM","DIS"]}]},
+  {date:"Dom 19 jul",matches:[{time:"\u2013",t:"\u26BD FINAL",grp:"FINAL",venue:"MetLife Stadium, Nueva Jersey",tv:["CHV","DS","PM","DIS"],must:true}]}
+];
+
+const TV_MAP={CHV:'<span class="tc tc-chv">CHV</span>',DS:'<span class="tc tc-ds">DSports</span>',PM:'<span class="tc tc-pm">Paramount+</span>',DIS:'<span class="tc tc-dis">Disney+</span>'};
+
+function flagImg(code,h){
+  // flagcdn.com standard sizes: 20x15, 24x18, 28x21, 32x24, 40x30
+  var sizes={15:[20,15],18:[24,18],20:[28,21],24:[32,24],30:[40,30]};
+  var sz=sizes[h]||sizes[15];
+  return'<img src="https://flagcdn.com/'+sz[0]+'x'+sz[1]+'/'+code+'.png" width="'+sz[0]+'" height="'+sz[1]+'" style="vertical-align:middle;margin-right:3px">';
+}
+function expandFlags(s,h){return (s||'').replace(/\[\[FLAG:([^\]]+)\]\]/g,function(m,c){return flagImg(c,h||15);});}
+function tvHtml(arr){return(arr||[]).map(function(t){return TV_MAP[t]||'';}).join('');}
+
+function fxSides(t){
+  return t.split(" vs. ").map(function(s){
+    var m=s.match(/\[\[FLAG:([^\]]+)\]\]/);
+    return {flag:m?m[1]:'',name:s.replace(/\s*\[\[FLAG:[^\]]+\]\]\s*/g,'').trim()};
+  });
+}
+function fxResult(a,b){
+  var r=DATA.resultados.filter(function(r){return (r.t1===a&&r.t2===b)||(r.t1===b&&r.t2===a);})[0];
+  if(!r)return null;
+  return r.t1===a?{g1:r.g1,g2:r.g2}:{g1:r.g2,g2:r.g1};
+}
+function renderFixture(){
+  var h='';
+  FIXTURE.forEach(function(day){
+    h+='<div class="day-card"><div class="day-head" onclick="this.parentElement.classList.toggle(\'collapsed\')"><div class="day-head-left"><span class="day-chevron">&#9660;</span><span>'+day.date+'</span></div><span class="day-count">'+day.matches.length+'</span></div><div class="day-body">';
+    day.matches.forEach(function(m){
+      if(m.t.indexOf(" vs. ")<0){
+        h+='<div class="fx-match fx-tba"><div class="fx-top"><span class="fx-grp">'+m.grp+'</span></div><div class="fx-special">'+expandFlags(m.t)+'</div><div class="fx-foot"><span class="fx-venue">'+m.venue+'</span><span class="fx-tv">'+tvHtml(m.tv)+'</span></div></div>';
+        return;
+      }
+      var s=fxSides(m.t),A=s[0],B=s[1];
+      var res=fxResult(A.name,B.name);
+      var played=!!res;
+      var winA=played&&res.g1>res.g2,winB=played&&res.g2>res.g1;
+      h+='<div class="fx-match'+(m.must?' fx-must':'')+(played?' played':'')+'">'
+        +'<div class="fx-top"><span class="fx-grp">'+m.grp+'</span>'+(played?'<span class="fx-fin">Final</span>':'<span class="fx-time">'+m.time+' Chile</span>')+'</div>'
+        +'<div class="fx-team'+(winA?' win':'')+'"><span class="fx-flag">'+(A.flag?flagImg(A.flag,16):'')+'</span><span class="fx-name">'+A.name+'</span>'+(played?'<span class="fx-score">'+res.g1+'</span>':'')+'</div>'
+        +'<div class="fx-team'+(winB?' win':'')+'"><span class="fx-flag">'+(B.flag?flagImg(B.flag,16):'')+'</span><span class="fx-name">'+B.name+'</span>'+(played?'<span class="fx-score">'+res.g2+'</span>':'')+'</div>'
+        +'<div class="fx-foot"><span class="fx-venue">'+m.venue+'</span><span class="fx-tv">'+tvHtml(m.tv)+'</span></div>'
+        +'</div>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('fixture-container').innerHTML='<div class="fixture-grid">'+h+'</div>';
+}
+
+function renderGroups(){
+  document.getElementById('groups-container').innerHTML=DATA.grupos.map(function(g){
+    var sorted=g.equipos.slice().sort(function(a,b){return (b.pts-a.pts)||((b.gf-b.gc)-(a.gf-a.gc));});
+    var maxPts=sorted[0].pts;
+    return'<div class="group-card"><div class="group-head"><div class="group-letter">GRUPO '+g.letra+'</div></div><div class="group-body">'+
+    sorted.map(function(t){return'<div class="gteam" onclick="openTeamByName(\''+t.name+'\')"><span class="gteam-flag">'+expandFlags(t.flag,18)+'</span><span class="gteam-name">'+t.name+'</span><span class="gteam-pts'+(t.pts===maxPts&&maxPts>0?' lead':'')+'">'+t.pts+'</span></div>';}).join('')+
+    '</div></div>';
+  }).join('');
+}
+
+function renderBracket(){
+  /* Panel de clasificados */
+  var qc=document.getElementById('qualified-container');
+  if(qc){
+    var cl=(DATA.llave&&DATA.llave.clasificados)||[];
+    if(cl.length){
+      qc.innerHTML='<div style="background:var(--azul);color:#fff;padding:14px 16px;margin-bottom:16px">'+
+        '<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Ya clasificados a la Ronda de 32</div>'+
+        '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px">'+
+        cl.map(function(t){return'<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);padding:8px 10px;border-left:3px solid var(--rojo)">'+expandFlags('[[FLAG:'+t.flag+']]',18)+'<div><div style="font-weight:600;font-size:13px">'+t.name+'</div><div style="font-size:10px;opacity:.8">'+t.nota+'</div></div></div>';}).join('')+
+        '</div></div>';
+    } else { qc.innerHTML=''; }
+  }
+  /* Cuadro */
+  var rounds=[
+    {key:'r32',label:'Ronda de 32',n:16},
+    {key:'r16',label:'Octavos',n:8},
+    {key:'qf',label:'Cuartos',n:4},
+    {key:'sf',label:'Semis',n:2},
+    {key:'final',label:'Final',n:1}
+  ];
+  function side(name,flag,goals){
+    if(!name)return'<div class="br-team"><span style="color:var(--g3);font-style:italic">Por definir</span></div>';
+    return'<div class="br-team">'+(flag?expandFlags('[[FLAG:'+flag+']]',13):'')+name+'<span class="score">'+(goals!==undefined&&goals!==null?goals:'')+'</span></div>';
+  }
+  var c=document.getElementById('bracket-container');
+  c.innerHTML=rounds.map(function(r){
+    var matches=DATA.llave[r.key]||[];
+    var slots='';
+    for(var i=0;i<r.n;i++){
+      var m=matches[i];
+      if(m&&m.t1){
+        slots+='<div class="br-match'+(m.winner?' winner':'')+'">'+side(m.t1,m.f1,m.g1)+side(m.t2,m.f2,m.g2)+(m.cap?'<div style="font-size:9px;color:var(--gt);margin-top:4px;line-height:1.3">'+m.cap+'</div>':'')+'</div>';
+      } else {
+        slots+='<div class="br-match"><div class="br-tbd">Por definir</div></div>';
+      }
+    }
+    return'<div class="bracket-round"><div class="br-head">'+r.label+'</div><div class="br-slots">'+slots+'</div></div>';
+  }).join('');
+}
+
+function renderStats(){
+  function card(title,cls,rows,key){
+    if(!rows||!rows.length)return'<div class="live-card"><div class="lc-head '+cls+'">'+title+'</div><div class="empty">Sin datos a\u00FAn</div></div>';
+    return'<div class="live-card"><div class="lc-head '+cls+'">'+title+'</div>'+rows.slice(0,8).map(function(r,i){
+      return'<div class="lc-row"><span class="lc-pos">'+(i+1)+'</span><span class="lc-name">'+r.nombre+'<br><span class="lc-sub">'+expandFlags(r.pais)+(r.nota?' \u00B7 '+r.nota:'')+'</span></span><span class="lc-val '+cls+'">'+r[key]+'</span></div>';
+    }).join('')+'</div>';
+  }
+  document.getElementById('stats-container').innerHTML=card('Goleadores','rojo',DATA.goleadores,'goles')+card('Asistidores','azul',DATA.asistidores,'asist')+card('Rojas','negro',DATA.tarjetas,'tarjetas');
+  /* Amarillas por equipo */
+  var ac=document.getElementById('amarillas-container');
+  if(ac){
+    var eq=(DATA.amarillasEquipo||[]).slice().sort(function(a,b){return b.ta-a.ta;});
+    if(eq.length){
+      var maxTa=eq[0].ta;
+      ac.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">'+
+        eq.map(function(t){return'<div style="display:flex;align-items:center;gap:8px;background:var(--blanco);border:1px solid var(--g2);border-left:4px solid #F2B900;padding:8px 10px">'+expandFlags('[[FLAG:'+t.flag+']]',18)+'<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">'+t.name+'</div>'+(t.nota?'<div style="font-size:9px;color:var(--rojo)">'+t.nota+'</div>':'')+'</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:20px;color:#B88900;min-width:22px;text-align:right">'+t.ta+'</div></div>';}).join('')+
+        '</div><div style="font-size:10px;color:var(--gt);margin-top:8px">9 selecciones sin amarillas: Alemania, Francia, Inglaterra, Jap\u00F3n, Noruega, Croacia, Senegal, Argelia y Jordania. Adem\u00E1s, una amarilla a un asistente de Paraguay y otra al t\u00E9cnico de Turqu\u00EDa.</div>';
+    } else { ac.innerHTML=''; }
+  }
+  var rc=document.getElementById('results-container');
+  if(!DATA.resultados||!DATA.resultados.length){rc.innerHTML='<div class="empty">Los resultados aparecer\u00E1n aqu\u00ED tras cada jornada</div>';return;}
+  rc.innerHTML=DATA.resultados.slice().reverse().map(function(r){
+    return'<div class="res-card"><div style="flex:1"><div class="res-teams">'+expandFlags('[[FLAG:'+r.t1Flag+']]')+r.t1+' vs. '+expandFlags('[[FLAG:'+r.t2Flag+']]')+r.t2+'</div><div class="res-sub">Grupo '+r.grupo+' &middot; '+r.fecha+'</div></div><div class="res-score">'+r.g1+' \u2013 '+r.g2+'</div></div>';
+  }).join('');
+}
+
+function renderNews(){
+  var c=document.getElementById('news-container');
+  if(!DATA.noticias||!DATA.noticias.length){c.innerHTML='<div class="empty">Las noticias aparecer\u00E1n a lo largo del torneo</div>';return;}
+  c.innerHTML=DATA.noticias.map(function(n){
+    return'<div class="news-card'+(n.brk?' brk':'')+'"><div class="news-date">'+n.fecha+'</div><div class="news-hed">'+n.titular+'</div><div class="news-body">'+n.texto+'</div><span class="news-tag'+(n.brk?' rojo':'')+'">'+n.tag+'</span></div>';
+  }).join('');
+}
+
+/* TEAM MODAL */
+function openTeam(id){
+  var eq=EQUIPOS.filter(function(e){return e.id===id;})[0];
+  if(!eq)return;
+  document.getElementById('modal-flag').innerHTML=expandFlags(eq.flag,32);
+  document.getElementById('modal-name').textContent=eq.name;
+  document.getElementById('modal-sub').textContent='Grupo '+eq.grupo+(eq.coach?' \u00B7 DT: '+eq.coach:'');
+  var teamMatches=[];
+  FIXTURE.forEach(function(day){
+    day.matches.forEach(function(m){
+      if(m.t&&m.t.toLowerCase().indexOf(eq.name.toLowerCase())>=0)
+        teamMatches.push({date:day.date,match:m});
+    });
+  });
+  var matchHtml=teamMatches.map(function(x){
+    var names=x.match.t.split(" vs. ").map(function(s){return s.replace(/\s*\[\[FLAG:[^\]]+\]\]\s*/g,'').trim();});
+    var a=names[0],b=names[1];
+    var res=DATA.resultados.filter(function(r){return (r.t1===a&&r.t2===b)||(r.t1===b&&r.t2===a);})[0];
+    var score=res?(res.t1===a?res.g1+'\u2013'+res.g2:res.g2+'\u2013'+res.g1):'<span class="tm-pend">vs</span>';
+    return'<div class="team-match"><span class="tm-date">'+x.date+'<br>'+x.match.time+'</span><span class="tm-teams">'+expandFlags(x.match.t)+'</span><span class="tm-score">'+score+'</span></div>';
+  }).join('');
+  var squadHtml='';
+  var byPos={Portero:[],Defensa:[],Mediocampista:[],Delantero:[]};
+  eq.plantel.forEach(function(p){if(byPos[p.pos])byPos[p.pos].push(p);});
+  var posLabels={Portero:'Porteros',Defensa:'Defensas',Mediocampista:'Mediocampistas',Delantero:'Delanteros'};
+  ['Portero','Defensa','Mediocampista','Delantero'].forEach(function(pos){
+    if(!byPos[pos].length)return;
+    squadHtml+='<div class="squad-pos-group"><div class="squad-pos-label">'+posLabels[pos]+'</div><div class="squad-grid">';
+    byPos[pos].forEach(function(p){
+      squadHtml+='<div class="squad-player">'
+        +'<div class="sq-num" style="background:'+eq.color+'">'+p.num+'</div>'
+        +'<div class="sq-info">'
+        +'<div class="sq-name">'+p.nombre+'</div>'
+        +(p.club?'<div class="sq-club">'+p.club+'</div>':'')
+        +'</div></div>';
+    });
+    squadHtml+='</div></div>';
+  });
+  document.getElementById('modal-body').innerHTML=
+    '<div class="modal-section"><div class="modal-sh">Partidos</div>'+matchHtml+'</div>'+
+    '<div class="modal-section"><div class="modal-sh">Plantel</div>'+squadHtml+'</div>';
+  document.getElementById('team-modal').classList.add('open');
+}
+function openTeamByName(name){
+  var eq=EQUIPOS.filter(function(e){return e.name===name;})[0];
+  if(eq)openTeam(eq.id);
+}
+function closeModal(e){if(e.target===document.getElementById('team-modal'))document.getElementById('team-modal').classList.remove('open');}
+
+function showTab(id,el){
+  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn,.nav-links a').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+}
+
+/* INIT */
+document.getElementById('last-update').textContent=DATA.lastUpdate;
+document.getElementById('hero-day').textContent=DATA.torneoDay;
+renderFixture();
+renderGroups();
+renderBracket();
+renderStats();
+renderNews();
+/* Colapsar todas las tarjetas del fixture, abrir solo el día actual */
+(function(){
+  var cards=document.querySelectorAll('.day-card');
+  var today=FIXTURE[DATA.torneoDay-1];
+  cards.forEach(function(card){
+    var head=card.querySelector('.day-head-left span:last-child');
+    var isToday=today&&head&&head.textContent===today.date;
+    if(!isToday)card.classList.add('collapsed');
+  });
+})();
+</script>
+</body>
+</html>
